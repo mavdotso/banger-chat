@@ -8,8 +8,8 @@ export default function Home() {
         <div className="grid h-screen w-full pl-[56px]">
             <Sidebar />
             <div className="flex flex-col">
-                <Header />
                 <PrivyProviderWrapper>
+                    <Header />
                     <ChatPage />
                 </PrivyProviderWrapper>
             </div>

@@ -10,7 +10,6 @@ export default function PrivyProviderWrapper({ children }: { children: React.Rea
         <PrivyProvider
             appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
             config={{
-                // Customize Privy's appearance in your app
                 appearance: {
                     theme: theme === 'dark' ? 'dark' : 'light',
                     accentColor: '#676FFF',
