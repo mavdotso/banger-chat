@@ -10,7 +10,7 @@ export function usePrivyAuth() {
             if (forceRefreshToken) {
                 const accessToken = await getAccessToken();
                 if (accessToken) {
-                    const verifyAuthToken = await fetch('/api/auth', {
+                    const verifyAuthToken = await fetch('/api/auth/verifyToken', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

@@ -3,12 +3,14 @@ import { v } from 'convex/values';
 
 export default defineSchema({
     users: defineTable({
+        userId: v.string(),
         twitterHandle: v.optional(v.string()),
         walletAddress: v.optional(v.string()),
         ownedNFTs: v.array(v.id('nfts')),
         profileImage: v.optional(v.string()),
         displayName: v.optional(v.string()),
         role: v.string(),
+        email: v.optional(v.string()),
     }),
 
     nfts: defineTable({
