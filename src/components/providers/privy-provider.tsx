@@ -1,4 +1,5 @@
 'use client';
+import ConvexClientProvider from '@/components/providers/convex-client-provider';
 import { PrivyProvider } from '@privy-io/react-auth';
 import { useTheme } from 'next-themes';
 
@@ -17,7 +18,7 @@ export default function PrivyProviderWrapper({ children }: { children: React.Rea
                 },
             }}
         >
-            {children}
+            <ConvexClientProvider>{children}</ConvexClientProvider>
         </PrivyProvider>
     );
 }

@@ -8,7 +8,10 @@ export const sendTextMessage = mutation({
         channelId: v.id('channels'),
     },
     handler: async (ctx, args) => {
-        // TODO: Get user
+        const identity = await ctx.auth.getUserIdentity();
+        if (identity === null) {
+            throw new Error('Unauthenticated call to mutation');
+        }
 
         const channel = await ctx.db
             .query('channels')
@@ -19,12 +22,12 @@ export const sendTextMessage = mutation({
             throw new ConvexError('Channel not found');
         }
 
-        // if (!channel.users.includes(user._id)) {
+        // if (!channel.users.includes(identity)) {
         //     throw new ConvexError('User is not in the channel');
         // }
 
         // await ctx.db.insert('messages', {
-        //     sender: user._id,
+        //     sender: identity._id,
         //     content: args.content,
         //     channelId: args.channelId,
         //     timestamp: new Date().getTime(),
