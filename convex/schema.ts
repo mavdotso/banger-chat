@@ -3,7 +3,7 @@ import { v } from 'convex/values';
 
 export default defineSchema({
     users: defineTable({
-        userId: v.string(),
+        tokenIdentifier: v.string(),
         twitterHandle: v.optional(v.string()),
         walletAddress: v.optional(v.string()),
         ownedNFTs: v.array(v.id('nfts')),
@@ -11,7 +11,7 @@ export default defineSchema({
         displayName: v.optional(v.string()),
         role: v.string(),
         email: v.optional(v.string()),
-    }),
+    }).index('by_tokenIdentifier', ['tokenIdentifier']),
 
     nfts: defineTable({
         tokenId: v.string(),
@@ -26,8 +26,10 @@ export default defineSchema({
     channels: defineTable({
         name: v.string(),
         description: v.optional(v.string()),
-        accessNFT: v.id('nfts'),
+        accessNFT: v.optional(v.string()),
         users: v.array(v.id('users')),
+        image: v.optional(v.string()),
+        admin: v.optional(v.id('users')),
     }),
 
     messages: defineTable({
@@ -35,5 +37,5 @@ export default defineSchema({
         sender: v.id('users'),
         content: v.string(),
         timestamp: v.number(),
-    }),
+    }).index('by_channelId', ['channelId']),
 });

@@ -1,5 +1,5 @@
 import { ConvexError, v } from 'convex/values';
-import { mutation } from './_generated/server';
+import { mutation, query } from './_generated/server';
 
 export const addUser = mutation({
     args: {
@@ -21,7 +21,7 @@ export const addUser = mutation({
         if (!existingUser) {
             // Insert the new user data into the database
             await ctx.db.insert('users', {
-                userId: args.userId,
+                tokenIdentifier: args.userId,
                 twitterHandle: args.twitterHandle || undefined, // Use null for optional fields if not provided
                 walletAddress: args.walletAddress || undefined,
                 ownedNFTs: [], // Initialize as empty array
@@ -34,5 +34,27 @@ export const addUser = mutation({
         } else {
             console.log('User already exists in the database.');
         }
+    },
+});
+
+export const getMe = query({
+    args: {},
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new ConvexError('Unauthorised');
+        }
+
+        const user = await ctx.db
+            .query('users')
+            .withIndex('by_tokenIdentifier', (q) => q.eq('tokenIdentifier', identity.tokenIdentifier))
+            .unique();
+
+        if (!user) {
+            throw new ConvexError('User not found');
+        }
+
+        return user;
     },
 });

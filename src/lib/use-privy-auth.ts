@@ -1,46 +1,44 @@
 import { useCallback, useMemo } from 'react';
 import { usePrivy } from '@privy-io/react-auth';
 
-// TODO: ???
+// TODO:
 export function usePrivyAuth() {
     const { getAccessToken, authenticated, ready } = usePrivy();
 
-    const fetchAccessToken = useCallback(
-        async ({ forceRefreshToken }: { forceRefreshToken: boolean }) => {
-            if (forceRefreshToken) {
-                const accessToken = await getAccessToken();
-                if (accessToken) {
-                    const verifyAuthToken = await fetch('/api/auth/verifyToken', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            accessToken: accessToken,
-                        }),
-                    });
+    const fetchAccessToken = useCallback(async ({ forceRefreshToken = true }: { forceRefreshToken: boolean }) => {
+        if (forceRefreshToken) {
+            const accessToken = await getAccessToken();
+            if (accessToken) {
+                const verifyAuthToken = await fetch('/api/auth/verifyToken', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        accessToken: accessToken,
+                    }),
+                });
 
-                    if (verifyAuthToken.status === 200) {
-                        return accessToken;
-                    } else {
-                        console.log('Request failed', verifyAuthToken.status);
-                        return null;
-                    }
+                if (verifyAuthToken.status === 200) {
+                    console.log('Privy authenticated?', authenticated);
+                    return authenticated;
                 } else {
-                    console.log("Couldn't get a token");
+                    console.log('Request failed', verifyAuthToken.status);
                     return null;
                 }
             } else {
-                return await getAccessToken();
+                console.log("Couldn't get a token");
+                return null;
             }
-        },
-        [getAccessToken]
-    );
+        } else {
+            return await getAccessToken();
+        }
+    }, []);
 
     return useMemo(
         () => ({
             isLoading: !ready,
-            isAuthenticated: !!authenticated,
+            isAuthenticated: authenticated ?? false,
             fetchAccessToken,
         }),
         [authenticated, ready, fetchAccessToken]

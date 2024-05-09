@@ -10,7 +10,7 @@ export default function ChatPage() {
     const session = useConvexAuth();
 
     useEffect(() => {
-        console.log(session);
+        console.log('Convex session:', session.isAuthenticated);
     }, [authenticated, session]);
 
     return (
@@ -18,7 +18,7 @@ export default function ChatPage() {
             {authenticated && (
                 <>
                     <ChatList />
-                    <ChatWindow />
+                    {/* <ChatWindow /> */}
                 </>
             )}
         </main>
