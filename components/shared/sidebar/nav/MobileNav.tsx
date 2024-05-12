@@ -10,7 +10,7 @@ import { useNavigation } from '@/hooks/useNavigation';
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
-const MobileNav = () => {
+export default function MobileNav() {
     const paths = useNavigation();
     const { isActive } = useChat();
 
@@ -49,6 +49,4 @@ const MobileNav = () => {
             </nav>
         </Card>
     );
-};
-
-export default MobileNav;
+}

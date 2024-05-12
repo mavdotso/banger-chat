@@ -9,7 +9,7 @@ import { useNavigation } from '@/hooks/useNavigation';
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
-const DesktopNav = () => {
+export default function DesktopNav() {
     const paths = useNavigation();
 
     return (
@@ -43,6 +43,4 @@ const DesktopNav = () => {
             </div>
         </Card>
     );
-};
-
-export default DesktopNav;
+}
