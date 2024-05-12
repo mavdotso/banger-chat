@@ -4,7 +4,7 @@ import { getUserByClerkId } from './_utils';
 
 export const create = mutation({
     args: {
-        conversationId: v.id('conversations'),
+        chatId: v.id('chats'),
         type: v.string(),
         content: v.array(v.string()),
     },
@@ -24,10 +24,10 @@ export const create = mutation({
             throw new ConvexError('User not found');
         }
 
-        const membership = await ctx.db.query('conversationMembers').withIndex('by_memberId_conversationId', (q) => q.eq('memberId', currentUser._id).eq('conversationId', args.conversationId));
+        const membership = await ctx.db.query('chatMembers').withIndex('by_memberId_chatId', (q) => q.eq('memberId', currentUser._id).eq('chatId', args.chatId));
 
         if (!membership) {
-            throw new ConvexError("You aren't a member of this conversation");
+            throw new ConvexError("You aren't a member of this chat");
         }
 
         const message = await ctx.db.insert('messages', {
@@ -35,7 +35,7 @@ export const create = mutation({
             ...args,
         });
 
-        await ctx.db.patch(args.conversationId, { lastMessageId: message });
+        await ctx.db.patch(args.chatId, { lastMessageId: message });
 
         return message;
     },
