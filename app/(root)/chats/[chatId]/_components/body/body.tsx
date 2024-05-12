@@ -6,8 +6,8 @@ import { Id } from '@/convex/_generated/dataModel';
 import { api } from '@/convex/_generated/api';
 import { useChat } from '@/hooks/useChat';
 import { useQuery } from 'convex/react';
-import { CallRoom } from './CallRoom';
-import Message from './Message';
+import { CallRoom } from './call-room';
+import Message from './message';
 
 type Props = {
     members: {
