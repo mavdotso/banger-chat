@@ -6,7 +6,11 @@ const nextConfig = {
         removeConsole: process.env.NODE_ENV !== 'development',
     },
     reactStrictMode: true,
+<<<<<<< HEAD
     swcMinify: true, // Better performance
+=======
+    swcMinify: true, // Better performance, rm if something breaks
+>>>>>>> origin/clerk
     images: {
         domains: ['img.clerk.com', 'utfs.io'],
     },

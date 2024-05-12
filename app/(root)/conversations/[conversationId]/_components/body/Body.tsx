@@ -28,17 +28,6 @@ const Body = ({ members, callType, setCallType }: Props) => {
         id: conversationId as Id<'conversations'>,
     });
 
-    const { mutate: markRead } = useMutationState(api.conversation.markRead);
-
-    useEffect(() => {
-        if (messages && messages.length > 0) {
-            markRead({
-                conversationId,
-                messageId: messages[0].message._id,
-            });
-        }
-    }, [messages?.length, conversationId, markRead]);
-
     const formatSeenBy = (names: string[]) => {
         switch (names.length) {
             case 1:
