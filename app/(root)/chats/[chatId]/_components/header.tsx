@@ -18,11 +18,11 @@ type Props = {
     setCallType: Dispatch<SetStateAction<'audio' | 'video' | null>>;
 };
 
-const Header = ({ imageUrl, name, options, setCallType }: Props) => {
+export default function Header({ imageUrl, name, options, setCallType }: Props) {
     return (
         <Card className="w-full flex rounded-lg items-center p-2 justify-between">
             <div className="flex items-center gap-2">
-                <Link className="block lg:hidden" href="/conversations">
+                <Link className="block lg:hidden" href="/chats">
                     <CircleArrowLeft />
                 </Link>
                 <Avatar className="w-8 h-8">
@@ -65,6 +65,4 @@ const Header = ({ imageUrl, name, options, setCallType }: Props) => {
             </div>
         </Card>
     );
-};
-
-export default Header;
+}

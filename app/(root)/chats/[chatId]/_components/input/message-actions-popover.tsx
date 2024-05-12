@@ -5,13 +5,13 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { PopoverClose } from '@radix-ui/react-popover';
 import { PlusCircle, Smile } from 'lucide-react';
 import React, { SetStateAction, useState } from 'react';
-import UploadFileDialog from '../dialogs/UploadFileDialog';
+import UploadFileDialog from '../dialogs/upload-file-dialog';
 
 type Props = {
     setEmojiPickerOpen: (value: SetStateAction<boolean>) => void;
 };
 
-const MessageActionsPopover = ({ setEmojiPickerOpen }: Props) => {
+export default function MessageActionsPopover({ setEmojiPickerOpen }: Props) {
     const [uploadFileDialogOpen, setUploadFileDialogOpen] = useState(false);
     const [uploadImageDialogOpen, setUploadImageDialogOpen] = useState(false);
 
@@ -39,6 +39,4 @@ const MessageActionsPopover = ({ setEmojiPickerOpen }: Props) => {
             </PopoverTrigger>
         </Popover>
     );
-};
-
-export default MessageActionsPopover;
+}

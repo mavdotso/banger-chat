@@ -1,16 +1,16 @@
 'use client';
 
-import Uploader from '@/components/shared/uploader';
-import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { api } from '@/convex/_generated/api';
-import { useConversation } from '@/hooks/useConversation';
 import { useMutationState } from '@/hooks/useMutationState';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Uploader from '@/components/shared/uploader';
+import { Button } from '@/components/ui/button';
+import { api } from '@/convex/_generated/api';
 import { ConvexError } from 'convex/values';
 import { File, Image } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { useChat } from '@/hooks/useChat';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -24,7 +24,7 @@ const uploadFileSchema = z.object({
     files: z.string().array().min(1, { message: 'You must select at least 1 file' }),
 });
 
-const UploadFileDialog = ({ open, toggle, type }: Props) => {
+export default function UploadFileDialog({ open, toggle, type }: Props) {
     const form = useForm<z.infer<typeof uploadFileSchema>>({
         resolver: zodResolver(uploadFileSchema),
         defaultValues: {
@@ -32,7 +32,7 @@ const UploadFileDialog = ({ open, toggle, type }: Props) => {
         },
     });
 
-    const { conversationId } = useConversation();
+    const { chatId } = useChat();
 
     const files = form.watch('files');
 
@@ -42,7 +42,7 @@ const UploadFileDialog = ({ open, toggle, type }: Props) => {
         createMessage({
             content: values.files,
             type,
-            conversationId,
+            chatId,
         })
             .then(() => {
                 form.reset();
@@ -91,6 +91,4 @@ const UploadFileDialog = ({ open, toggle, type }: Props) => {
             </DialogContent>
         </Dialog>
     );
-};
-
-export default UploadFileDialog;
+}

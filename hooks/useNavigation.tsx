@@ -7,33 +7,25 @@ import { api } from '@/convex/_generated/api';
 export const useNavigation = () => {
     const pathname = usePathname();
 
-    const requestsCount = useQuery(api.friendRequests.count);
-    const conversations = useQuery(api.conversations.get);
+    const chats = useQuery(api.chats.get);
 
     const unseenMessagesCount = useMemo(() => {
-        return conversations?.reduce((acc, curr) => {
+        return chats?.reduce((acc, curr) => {
             return acc + curr.unseenCount;
         }, 0);
-    }, [conversations]);
+    }, [chats]);
 
     const paths = useMemo(
         () => [
             {
-                name: 'Conversations',
-                href: '/conversations',
+                name: 'Chats',
+                href: '/chats',
                 icon: <MessageSquare />,
-                active: pathname.startsWith('/conversations'),
+                active: pathname.startsWith('/chats'),
                 count: unseenMessagesCount,
             },
-            {
-                name: 'Friends',
-                href: '/friends',
-                icon: <Users />,
-                active: pathname === '/friends',
-                count: requestsCount,
-            },
         ],
-        [pathname, requestsCount, unseenMessagesCount]
+        [pathname, unseenMessagesCount]
     );
 
     return paths;

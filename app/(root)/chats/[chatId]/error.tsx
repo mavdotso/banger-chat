@@ -1,6 +1,6 @@
 'use client';
 
-import ConversationFallback from '@/components/shared/conversation/chats-fallback';
+import ChatsFallback from '@/components/shared/chat/chats-fallback';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -8,8 +8,8 @@ export default function Error({ error }: { error: Error }) {
     const router = useRouter();
 
     useEffect(() => {
-        router.push('/conversations');
+        router.push('/chats');
     }, [error, router]);
 
-    return <ConversationFallback />;
+    return <ChatsFallback />;
 }

@@ -1,8 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-
-import { useConversation } from '@/hooks/useConversation';
+import { useChat } from '@/hooks/useChat';
 import { Card } from '@/components/ui/card';
 
 type Props = React.PropsWithChildren<{
@@ -10,8 +9,8 @@ type Props = React.PropsWithChildren<{
     action?: React.ReactNode;
 }>;
 
-const ItemList = ({ children, title, action: Action }: Props) => {
-    const { isActive } = useConversation();
+export default function ItemList({ children, title, action: Action }: Props) {
+    const { isActive } = useChat();
 
     return (
         <Card
@@ -27,6 +26,4 @@ const ItemList = ({ children, title, action: Action }: Props) => {
             <div className="w-full h-full flex flex-col items-center justify-start gap-2">{children}</div>
         </Card>
     );
-};
-
-export default ItemList;
+}

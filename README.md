@@ -4,7 +4,8 @@
 - [x] Create schema
 - [ ] Create UI scaffolding
 - [ ] Chat features
-    - [ ] Create chat
+    - [ ] ~~Create chat~~
+    - [ ] Claim group ownership
     - [ ] Chats list
     - [ ] Mute / ban features
     - [ ] @ tag someone

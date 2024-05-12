@@ -1,14 +1,13 @@
 'use client';
 
-import { api } from '@/convex/_generated/api';
-import { Id } from '@/convex/_generated/dataModel';
-import { useQuery } from 'convex/react';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import Message from './Message';
-import { useMutationState } from '@/hooks/useMutationState';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useConversation } from '@/hooks/useConversation';
+import React, { Dispatch, SetStateAction } from 'react';
+import { Id } from '@/convex/_generated/dataModel';
+import { api } from '@/convex/_generated/api';
+import { useChat } from '@/hooks/useChat';
+import { useQuery } from 'convex/react';
 import { CallRoom } from './CallRoom';
+import Message from './Message';
 
 type Props = {
     members: {
@@ -21,14 +20,14 @@ type Props = {
     setCallType: Dispatch<SetStateAction<'audio' | 'video' | null>>;
 };
 
-const Body = ({ members, callType, setCallType }: Props) => {
-    const { conversationId } = useConversation();
+export default function Body({ members, callType, setCallType }: Props) {
+    const { chatId } = useChat();
 
     const messages = useQuery(api.messages.get, {
-        id: conversationId as Id<'conversations'>,
+        id: chatId as Id<'chats'>,
     });
 
-    const formatSeenBy = (names: string[]) => {
+    function formatSeenBy(names: string[]) {
         switch (names.length) {
             case 1:
                 return <p className="text-muted-foreground text-sm text-right">{`Seen by ${names[0]}`}</p>;
@@ -52,15 +51,13 @@ const Body = ({ members, callType, setCallType }: Props) => {
                     </TooltipProvider>
                 );
         }
-    };
+    }
 
-    const getSeenMessage = (messageId: Id<'messages'>, senderId: Id<'users'>) => {
+    function getSeenMessage(messageId: Id<'messages'>, senderId: Id<'users'>) {
         const seenUsers = members.filter((member) => member.lastSeenMessageId === messageId && member._id !== senderId).map((user) => user.username!.split(' ')[0]);
-
         if (seenUsers.length === 0) return undefined;
-
         return formatSeenBy(seenUsers);
-    };
+    }
 
     return (
         <div className="flex-1 w-full flex overflow-y-scroll flex-col-reverse gap-2 p-3 no-scrollbar">
@@ -89,6 +86,4 @@ const Body = ({ members, callType, setCallType }: Props) => {
             )}
         </div>
     );
-};
-
-export default Body;
+}

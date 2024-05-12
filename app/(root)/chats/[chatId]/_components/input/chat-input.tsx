@@ -13,8 +13,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ConvexError } from 'convex/values';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { useConversation } from '@/hooks/useConversation';
-import MessageActionsPopover from './MessageActionsPopover';
+import { useChat } from '@/hooks/useChat';
+import MessageActionsPopover from './message-actions-popover';
 import { useTheme } from 'next-themes';
 import EmojiPicker, { Theme } from 'emoji-picker-react';
 
@@ -24,13 +24,13 @@ const chatMessageSchema = z.object({
     content: z.string().min(1, { message: "This field can't be empty" }),
 });
 
-const ChatInput: FC<ChatInputProps> = ({}) => {
+export default function ChatInput() {
     const emojiPickerRef = useRef<any>(null);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     const [cursorPosition, setCursorPosition] = useState(0);
 
-    const { conversationId } = useConversation();
+    const { chatId } = useChat();
 
     const { theme } = useTheme();
 
@@ -42,7 +42,6 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
                 setEmojiPickerOpen(false);
             }
         };
-
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -58,27 +57,25 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
 
     const content = form.watch('content', '');
 
-    const handleInputChange = (event: any) => {
+    function handleInputChange(event: any) {
         const { value, selectionStart } = event.target;
         if (selectionStart !== null) {
             form.setValue('content', value);
             setCursorPosition(selectionStart);
         }
-    };
+    }
 
-    const insertEmoji = (emoji: string) => {
+    function insertEmoji(emoji: string) {
         const newText = [content.substring(0, cursorPosition), emoji, content.substring(cursorPosition)].join('');
-
         form.setValue('content', newText);
-
         setCursorPosition(cursorPosition + emoji.length);
-    };
+    }
 
-    const handleSubmit = async (values: z.infer<typeof chatMessageSchema>) => {
+    async function handleSubmit(values: z.infer<typeof chatMessageSchema>) {
         createMessage({
             content: [values.content],
             type: 'text',
-            conversationId,
+            chatId,
         })
             .then(() => {
                 form.reset();
@@ -87,7 +84,7 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
             .catch((error) => {
                 toast.error(error instanceof ConvexError ? error.data : 'Unexpected error occurred');
             });
-    };
+    }
 
     return (
         <Card className="w-full p-2 rounded-lg relative">
@@ -140,6 +137,4 @@ const ChatInput: FC<ChatInputProps> = ({}) => {
             </div>
         </Card>
     );
-};
-
-export default ChatInput;
+}

@@ -198,10 +198,10 @@ export const leaveChat = mutation({
             throw new ConvexError('User not found');
         }
 
-        const conversation = await ctx.db.get(args.chatId);
+        const chat = await ctx.db.get(args.chatId);
 
-        if (!conversation) {
-            throw new ConvexError('Conversation not found');
+        if (!chat) {
+            throw new ConvexError('Chat not found');
         }
 
         const membership = await ctx.db

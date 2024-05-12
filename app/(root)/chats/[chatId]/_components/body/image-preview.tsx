@@ -7,11 +7,11 @@ type Props = {
     urls: string[];
 };
 
-const ImagePreview = ({ urls }: Props) => {
-    const isVideoFile = (filename: string) => {
+export default function ImagePreview({ urls }: Props) {
+    function isVideoFile(filename: string) {
         const videoFilePattern = /\.(mp4|webm|ogg|mov)$/i;
         return videoFilePattern.test(filename);
-    };
+    }
 
     return (
         <div
@@ -27,7 +27,6 @@ const ImagePreview = ({ urls }: Props) => {
                     <Dialog key={index}>
                         <div
                             className={cn('relative cursor-pointer', {
-                                // if is not video
                                 'w-28 h-28 max-w-full': !isVideo,
                             })}
                         >
@@ -62,6 +61,4 @@ const ImagePreview = ({ urls }: Props) => {
             })}
         </div>
     );
-};
-
-export default ImagePreview;
+}

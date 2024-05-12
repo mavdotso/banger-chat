@@ -16,11 +16,12 @@ export default defineSchema({
         .index('by_card', ['card'])
         .index('by_user', ['user']),
     chats: defineTable({
-        name: v.optional(v.string()),
+        name: v.string(),
         admin: v.id('users'),
         moderators: v.optional(v.array(v.id('users'))),
         cardAddress: v.id('cards'),
         lastMessageId: v.optional(v.id('messages')),
+        imageUrl: v.optional(v.string()),
     }),
     chatMembers: defineTable({
         memberId: v.id('users'),

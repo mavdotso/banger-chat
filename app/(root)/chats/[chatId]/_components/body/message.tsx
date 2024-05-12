@@ -2,8 +2,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { format } from 'date-fns';
-import ImagePreview from './ImagePreview';
-import FilePreview from './FilePreview';
+import ImagePreview from './image-preview';
+import FilePreview from './file-preview';
 import { Badge } from '@/components/ui/badge';
 
 type Props = {
@@ -17,10 +17,10 @@ type Props = {
     type: string;
 };
 
-const Message = ({ fromCurrentUser, senderImage, senderName, lastByUser, content, createdAt, seen, type }: Props) => {
-    const formatTime = (timestamp: number) => {
+export default function Message({ fromCurrentUser, senderImage, senderName, lastByUser, content, createdAt, seen, type }: Props) {
+    function formatTime(timestamp: number) {
         return format(timestamp, 'HH:mm');
-    };
+    }
 
     return (
         <div
@@ -70,6 +70,4 @@ const Message = ({ fromCurrentUser, senderImage, senderName, lastByUser, content
             </Avatar>
         </div>
     );
-};
-
-export default Message;
+}

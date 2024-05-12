@@ -31,7 +31,7 @@ export default function ChatItem({ id, name, lastMessageSender, lastMessageConte
                                 <p className="truncate overflow-ellipsis">{lastMessageContent}</p>
                             </span>
                         ) : (
-                            <p className="text-sm text-muted-foreground truncate">Start the conversation!</p>
+                            <p className="text-sm text-muted-foreground truncate">Start the chat!</p>
                         )}
                     </div>
                 </div>

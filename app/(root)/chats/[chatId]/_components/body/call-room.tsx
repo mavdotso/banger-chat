@@ -9,7 +9,7 @@ import { useMutationState } from '@/hooks/useMutationState';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { useConversation } from '@/hooks/useConversation';
+import { useChat } from '@/hooks/useChat';
 
 type CallRoomProps = {
     video: boolean;
@@ -21,16 +21,16 @@ export const CallRoom = ({ audio, video, handleDisconnect }: CallRoomProps) => {
     const { user } = useUser();
     const [token, setToken] = useState('');
 
-    const { conversationId } = useConversation();
+    const { chatId } = useChat();
 
     const { mutate: createMessage, pending } = useMutationState(api.message.create);
 
     useEffect(() => {
-        if (!user?.fullName) return;
+        if (!user?.username) return;
 
         (async () => {
             try {
-                const res = await fetch(`/api/livekit?room=${conversationId}&username=${user.fullName} (${Math.floor(Math.random() * 3000)})`);
+                const res = await fetch(`/api/livekit?room=${chatId}&username=${user.username} (${Math.floor(Math.random() * 3000)})`);
                 const data = await res.json();
 
                 setToken(data.token);
@@ -38,7 +38,7 @@ export const CallRoom = ({ audio, video, handleDisconnect }: CallRoomProps) => {
                 toast.error('Could not join the call');
             }
         })();
-    }, [user?.fullName, conversationId]);
+    }, [user?.username, chatId]);
 
     if (token === '') {
         return (
@@ -64,7 +64,7 @@ export const CallRoom = ({ audio, video, handleDisconnect }: CallRoomProps) => {
                 onDisconnected={() => handleDisconnect()}
                 onConnected={() => {
                     createMessage({
-                        conversationId,
+                        chatId,
                         type: 'call',
                         content: [],
                     });

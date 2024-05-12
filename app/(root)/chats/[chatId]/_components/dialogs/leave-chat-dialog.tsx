@@ -9,40 +9,38 @@ import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
-    conversationId: Id<'conversations'>;
+    chatId: Id<'chats'>;
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const DeleteGroupDialog = ({ conversationId, open, setOpen }: Props) => {
-    const { mutate: deleteGroup, pending } = useMutationState(api.conversation.deleteGroup);
+export default function LeaveChatDialog({ chatId, open, setOpen }: Props) {
+    const { mutate: leaveChat, pending } = useMutationState(api.chat.leaveChat);
 
-    const handleDeleteGroup = async () => {
-        deleteGroup({ conversationId })
+    async function handleLeaveChat() {
+        leaveChat({ chatId })
             .then(() => {
-                toast.success('Deleted group');
+                toast.success('You successfully left the chat');
             })
             .catch((error) => {
                 toast.error(error instanceof ConvexError ? error.data : 'Unexpected error occurred');
             });
-    };
+    }
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This action cannot be undone. All messages will be deleted and you will not be able to message this group.</AlertDialogDescription>
+                    <AlertDialogDescription>This action cannot be undone. You will not be able to see any previous messages or send new messages to this chat</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel disabled={pending}>Cancel</AlertDialogCancel>
-                    <AlertDialogAction disabled={pending} onClick={handleDeleteGroup}>
-                        Delete
+                    <AlertDialogAction disabled={pending} onClick={handleLeaveChat}>
+                        Leave
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
     );
-};
-
-export default DeleteGroupDialog;
+}

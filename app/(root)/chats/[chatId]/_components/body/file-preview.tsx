@@ -5,7 +5,7 @@ import React from 'react';
 
 type Props = { url: string };
 
-const FilePreview = ({ url }: Props) => {
+export default function FilePreview({ url }: Props) {
     return (
         <Link href={url} target="_blank">
             <Button variant="secondary">
@@ -13,6 +13,4 @@ const FilePreview = ({ url }: Props) => {
             </Button>
         </Link>
     );
-};
-
-export default FilePreview;
+}

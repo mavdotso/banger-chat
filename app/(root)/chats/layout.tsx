@@ -1,10 +1,9 @@
 'use client';
 
-import ItemList from '@/components/shared/item-list/ItemList';
+import ItemList from '@/components/shared/item-list/item-list';
 import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
 import { Loader2 } from 'lucide-react';
-import CreateGroupDialog from './_components/CreateGroupDialog';
 import ChatItem from './_components/chat-item';
 
 type Props = React.PropsWithChildren<{}>;
@@ -14,10 +13,17 @@ export default function ChatsLayout({ children }: Props) {
 
     return (
         <>
-            <ItemList title="Chats" action={<CreateGroupDialog />}>
+            <ItemList
+                title="Chats"
+                action={
+                    // TODO: edit action
+                    ''
+                    // <CreateGroupDialog />
+                }
+            >
                 {chats ? (
                     chats.length === 0 ? (
-                        <p className="w-full h-full flex items-center justify-center">No conversations found</p>
+                        <p className="w-full h-full flex items-center justify-center">No chats found</p>
                     ) : (
                         chats.map((chat) => {
                             return (

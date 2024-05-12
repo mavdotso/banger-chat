@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ui/theme/theme-toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useConversation } from '@/hooks/useConversation';
+import { useChat } from '@/hooks/useChat';
 import { useNavigation } from '@/hooks/useNavigation';
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
 const MobileNav = () => {
     const paths = useNavigation();
-    const { isActive } = useConversation();
+    const { isActive } = useChat();
 
     if (isActive) return null;
 
