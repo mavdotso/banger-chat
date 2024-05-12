@@ -9,17 +9,25 @@ import { Loader2 } from 'lucide-react';
 import Request from './_components/Request';
 
 const FriendsPage = () => {
-    const requests = useQuery(api.requests.get);
+    const friendRequests = useQuery(api.friendRequests.get);
 
     return (
         <>
             <ItemList title="Friends" action={<AddFriendDialog />}>
-                {requests ? (
-                    requests.length === 0 ? (
+                {friendRequests ? (
+                    friendRequests.length === 0 ? (
                         <p className="w-full h-full flex items-center justify-center">No friend requests found</p>
                     ) : (
-                        requests.map((request) => {
-                            return <Request key={request.request._id} id={request.request._id} imageUrl={request.sender.imageUrl} username={request.sender.username} email={request.sender.email} />;
+                        friendRequests.map((friendRequest) => {
+                            return (
+                                <Request
+                                    key={friendRequest.friendRequest._id}
+                                    id={friendRequest.friendRequest._id}
+                                    imageUrl={friendRequest.sender.imageUrl}
+                                    username={friendRequest.sender.username}
+                                    email={friendRequest.sender.email}
+                                />
+                            );
                         })
                     )
                 ) : (

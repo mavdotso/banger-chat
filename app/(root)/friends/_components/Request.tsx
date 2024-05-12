@@ -12,15 +12,15 @@ import React from 'react';
 import { toast } from 'sonner';
 
 type Props = {
-    id: Id<'requests'>;
+    id: Id<'friendRequests'>;
     imageUrl: string;
     username: string;
     email: string;
 };
 
 const Request = ({ id, imageUrl, username, email }: Props) => {
-    const { mutate: denyRequest, pending: denyPending } = useMutationState(api.request.deny);
-    const { mutate: acceptRequest, pending: acceptPending } = useMutationState(api.request.accept);
+    const { mutate: denyRequest, pending: denyPending } = useMutationState(api.friendRequest.deny);
+    const { mutate: acceptRequest, pending: acceptPending } = useMutationState(api.friendRequest.accept);
 
     return (
         <Card className="w-full p-2 flex flex-row items-center justify-between gap-2">
