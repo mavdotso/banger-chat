@@ -14,14 +14,15 @@ import { useUser } from '@clerk/nextjs';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { catchClerkError } from '@/lib/utils';
 
 type User = {
     email: string;
     username: string;
-    walletAddress: string;
+    web3Wallet: string;
 };
 
-type UserSetupProps = Pick<User, 'email' | 'username' | 'walletAddress'>;
+type UserSetupProps = Pick<User, 'email' | 'username' | 'web3Wallet'>;
 
 export default function AccountSetupForm({ username }: { username: string }) {
     const { user } = useUser();
@@ -29,17 +30,42 @@ export default function AccountSetupForm({ username }: { username: string }) {
 
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
         username: username,
-        email: '',
-        walletAddress: '',
+        email: user?.emailAddresses[0].emailAddress || '',
+        web3Wallet: user?.web3Wallets[0].web3Wallet || '',
     });
 
-    const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUserAccountData({
             ...userAccountData,
             [name]: value,
         });
     };
+
+    async function handleConnectWallet() {
+        if (!user) return;
+        await user.web3Wallets[0]
+            ?.prepareVerification({ strategy: 'web3_metamask_signature' })
+            .then((response) => console.log(response))
+            .catch((error) => {
+                catchClerkError(error);
+            });
+
+        // TODO:
+        await user.web3Wallets[0]
+            ?.attemptVerification({ signature: user.web3Wallets[0].verification.nonce })
+            .then((response) => console.log(response))
+            .catch((error) => {
+                catchClerkError(error);
+            });
+
+        // await user
+        //     .createWeb3Wallet({ web3Wallet: userAccountData.web3Wallet })
+        //     .then((response) => console.log(response))
+        //     .catch((error) => {
+        //         catchClerkError(error);
+        //     });
+    }
 
     // this function we're changing to Convex function
     // const { mutate: accountSetup, isLoading } = api.auth.accountSetup.useMutation({
@@ -132,7 +158,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                         name="email"
                                         className="select-none max-h-[100px]"
                                         maxLength={100}
-                                        value={userAccountData.email!}
+                                        value={userAccountData.email}
                                         onChange={handleFieldChange}
                                         placeholder="Your email address"
                                     />
@@ -143,12 +169,11 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                     <Input
                                         name="web3Wallet"
                                         className="select-none max-h-[100px]"
-                                        maxLength={100}
-                                        value={userAccountData.walletAddress!}
+                                        value={userAccountData.web3Wallet}
                                         onChange={handleFieldChange}
                                         placeholder="Your web3 wallet address"
                                     />
-                                    <Button className="rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleAccountSetup}>
+                                    <Button className="rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleConnectWallet}>
                                         Connect wallet
                                         <span className="sr-only">Connect wallet</span>
                                     </Button>
