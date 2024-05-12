@@ -1,7 +1,7 @@
 ## MVP TODD:
 - [x] Connect Convex
 - [x] Connect Clerk
-- [ ] Create schema
+- [x] Create schema
 - [ ] Create UI scaffolding
 - [ ] Chat features
     - [ ] Create chat

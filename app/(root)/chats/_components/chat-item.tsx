@@ -6,16 +6,15 @@ import Link from 'next/link';
 import React from 'react';
 
 type Props = {
-    id: Id<'conversations'>;
+    id: Id<'chats'>;
     name: string;
     lastMessageSender?: string;
     lastMessageContent?: string;
-    unseenCount: number;
 };
 
-const GroupConversationItem = ({ id, name, lastMessageSender, lastMessageContent, unseenCount }: Props) => {
+export default function ChatItem({ id, name, lastMessageSender, lastMessageContent }: Props) {
     return (
-        <Link href={`/conversations/${id}`} className="w-full">
+        <Link href={`/chats/${id}`} className="w-full">
             <Card className="p-2 flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-4 truncate">
                     <Avatar>
@@ -36,11 +35,7 @@ const GroupConversationItem = ({ id, name, lastMessageSender, lastMessageContent
                         )}
                     </div>
                 </div>
-
-                {unseenCount ? <Badge>{unseenCount}</Badge> : null}
             </Card>
         </Link>
     );
-};
-
-export default GroupConversationItem;
+}

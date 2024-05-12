@@ -25,6 +25,7 @@ export default defineSchema({
     chatMembers: defineTable({
         memberId: v.id('users'),
         chatId: v.id('chats'),
+        lastSeenMessage: v.optional(v.id('messages')),
     })
         .index('by_memberId', ['memberId'])
         .index('by_chatId', ['chatId'])

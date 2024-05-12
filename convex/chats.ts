@@ -38,15 +38,38 @@ export const get = query({
             })
         );
 
-        const chatWithDetails = await Promise.all(
+        const chatsWithDetails = await Promise.all(
             chats.map(async (chat, index) => {
+                const allChatMemberships = await ctx.db
+                    .query('chatMembers')
+                    .withIndex('by_chatId', (q) => q.eq('chatId', chat?._id))
+                    .collect();
+
+                const lastMessage = await getLastMessageDetails({
+                    ctx,
+                    id: chat.lastMessageId,
+                });
+
+                const lastSeenMessage = chatMemberships[index].lastSeenMessage ? await ctx.db.get(chatMemberships[index].lastSeenMessage!) : null;
+
+                const lastSeenMessageTime = lastSeenMessage ? lastSeenMessage._creationTime : -1;
+
+                const unseenMessages = await ctx.db
+                    .query('messages')
+                    .withIndex('by_chatId', (q) => q.eq('chatId', chat?._id))
+                    .filter((q) => q.gt(q.field('_creationTime'), lastSeenMessageTime))
+                    .filter((q) => q.neq(q.field('senderId'), currentUser._id))
+                    .collect();
+
                 return {
                     chat,
+                    lastMessage,
+                    unseenCount: unseenMessages.length,
                 };
             })
         );
 
-        return chatWithDetails;
+        return chatsWithDetails;
     },
 });
 
