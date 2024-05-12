@@ -5,7 +5,7 @@
 - [ ] Create UI scaffolding
 - [ ] Chat features
     - [ ] ~~Create chat~~
-    - [ ] Claim group ownership
+    - [ ] Claim chat ownership
     - [ ] Chats list
     - [ ] Mute / ban features
     - [ ] @ tag someone

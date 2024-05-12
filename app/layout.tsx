@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import ConvexClientProviders from '@/providers/ConvexClientProviders';
+import ConvexClientProvider from '@/providers/convex-client-provider';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import LoadingLogo from '@/components/shared/LoadingLogo';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -34,7 +34,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                    <ConvexClientProviders>
+                    <ConvexClientProvider>
                         <ClerkLoading>
                             <LoadingLogo />
                         </ClerkLoading>
@@ -42,7 +42,7 @@ export default function RootLayout({
                             <TooltipProvider>{children}</TooltipProvider>
                             <Toaster richColors />
                         </ClerkLoaded>
-                    </ConvexClientProviders>
+                    </ConvexClientProvider>
                 </ThemeProvider>
             </body>
         </html>

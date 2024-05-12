@@ -50,6 +50,7 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
                 username: event.data.username || '',
                 imageUrl: event.data.image_url || '',
                 clerkId: event.data.id,
+                email: event.data.email_addresses[0].email_address || '',
             });
 
             break;
