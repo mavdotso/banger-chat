@@ -1,10 +1,10 @@
 import { usePathname } from 'next/navigation';
 import { useMemo } from 'react';
-import { MessageSquare, Users } from 'lucide-react';
+import { MessageSquare, User, Users } from 'lucide-react';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 
-export const useNavigation = () => {
+export function useNavigation() {
     const pathname = usePathname();
 
     const chats = useQuery(api.chats.get);
@@ -24,9 +24,14 @@ export const useNavigation = () => {
                 active: pathname.startsWith('/chats'),
                 count: unseenMessagesCount,
             },
+            {
+                name: 'Profile',
+                href: '/profile',
+                icon: <User />,
+            },
         ],
         [pathname, unseenMessagesCount]
     );
 
     return paths;
-};
+}

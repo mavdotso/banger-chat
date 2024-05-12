@@ -1,5 +1,5 @@
-import DesktopNav from './nav/DesktopNav';
-import MobileNav from './nav/MobileNav';
+import DesktopNav from './nav/desktop-nav';
+import MobileNav from './nav/mobile-nav';
 
 type Props = React.PropsWithChildren<{}>;
 

@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import ConvexClientProvider from '@/providers/convex-client-provider';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
-import LoadingLogo from '@/components/shared/LoadingLogo';
+import LoadingLogo from '@/components/shared/loading-logo';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from '@/components/ui/theme/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
@@ -39,7 +39,7 @@ export default function RootLayout({
                             <LoadingLogo />
                         </ClerkLoading>
                         <ClerkLoaded>
-                            <TooltipProvider>{children}</TooltipProvider>
+                            <TooltipProvider>{children as any}</TooltipProvider>
                             <Toaster richColors />
                         </ClerkLoaded>
                     </ConvexClientProvider>

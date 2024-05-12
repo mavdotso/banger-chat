@@ -4,7 +4,7 @@ import { internal } from './_generated/api';
 import type { WebhookEvent } from '@clerk/backend';
 import { Webhook } from 'svix';
 
-const validatePayload = async (req: Request): Promise<WebhookEvent | undefined> => {
+async function validatePayload(req: Request): Promise<WebhookEvent | undefined> {
     const payload = await req.text();
 
     const svixHeaders = {
@@ -23,7 +23,7 @@ const validatePayload = async (req: Request): Promise<WebhookEvent | undefined> 
         console.error('Clerk webhook request could not be verified');
         return;
     }
-};
+}
 
 const handleClerkWebhook = httpAction(async (ctx, req) => {
     const event = await validatePayload(req);
