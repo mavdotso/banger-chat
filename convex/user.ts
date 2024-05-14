@@ -7,6 +7,7 @@ export const create = internalMutation({
         imageUrl: v.string(),
         clerkId: v.string(),
         email: v.string(),
+        role: v.string(),
     },
     handler: async (ctx, args) => {
         await ctx.db.insert('users', args);

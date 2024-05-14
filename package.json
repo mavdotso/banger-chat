@@ -42,6 +42,7 @@
         "tailwind-merge": "^2.3.0",
         "tailwindcss-animate": "^1.0.7",
         "uploadthing": "^6.10.0",
+        "viem": "^2.10.5",
         "zod": "^3.22.5"
     },
     "devDependencies": {

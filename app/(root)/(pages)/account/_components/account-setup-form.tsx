@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { catchClerkError } from '@/lib/utils';
+import { Web3WalletResource } from '@clerk/types';
 
 type User = {
     email: string;
@@ -44,30 +45,69 @@ export default function AccountSetupForm({ username }: { username: string }) {
 
     async function handleConnectWallet() {
         if (!user) return;
-        await user.web3Wallets[0]
-            ?.prepareVerification({ strategy: 'web3_metamask_signature' })
-            .then((response) => console.log(response))
-            .catch((error) => {
-                catchClerkError(error);
-            });
 
-        // TODO:
-        await user.web3Wallets[0]
-            ?.attemptVerification({ signature: user.web3Wallets[0].verification.nonce })
-            .then((response) => console.log(response))
-            .catch((error) => {
-                catchClerkError(error);
-            });
+        let wallet = user.web3Wallets.find((wallet) => wallet.web3Wallet === userAccountData.web3Wallet);
 
-        // await user
-        //     .createWeb3Wallet({ web3Wallet: userAccountData.web3Wallet })
-        //     .then((response) => console.log(response))
-        //     .catch((error) => {
-        //         catchClerkError(error);
-        //     });
+        if (!wallet) {
+            // Create a new wallet if there's no wallet associated with this user's account
+            await user
+                .createWeb3Wallet({ web3Wallet: userAccountData.web3Wallet })
+                .then((response) => console.log(response))
+                .catch((error) => {
+                    catchClerkError(error);
+                });
+
+            wallet = user.web3Wallets.find((wallet) => wallet.web3Wallet === userAccountData.web3Wallet);
+        }
+
+        await verifyWallet(wallet!);
+
+        switch (wallet!.verification.status) {
+            case 'unverified':
+                console.log('Wallet is unverified');
+                toast.error('Wallet is unverified, please try again');
+                break;
+            case 'verified':
+                console.log('Sucessfully verified the wallet');
+                toast.success('Sucessfully verified the wallet');
+                break;
+            case 'transferable':
+                console.log('The wallet is transferable?');
+                toast('The wallet is transferable?');
+                break;
+            case 'failed':
+                console.log('Verification failed, try again');
+                toast.error('Wallet is unverified, please try again');
+                break;
+            case 'expired':
+            default:
+                console.log('Verification expired, please try again');
+                toast.error('Wallet is unverified, please try again');
+                break;
+        }
     }
 
-    // this function we're changing to Convex function
+    async function verifyWallet(wallet: Web3WalletResource) {
+        await wallet
+            .prepareVerification({
+                strategy: 'web3_metamask_signature',
+            })
+            .then((response) => console.log(response))
+            .catch((error) => {
+                catchClerkError(error);
+            });
+
+        await wallet
+            .attemptVerification({
+                signature: `${wallet.id}_${wallet.verification.nonce}`,
+            })
+            .then((response) => console.log(response))
+            .catch((error) => {
+                catchClerkError(error);
+            });
+    }
+
+    // TODO: changing to Convex function
     // const { mutate: accountSetup, isLoading } = api.auth.accountSetup.useMutation({
     //     onSuccess: ({ success, username }) => {
     //         if (success) {

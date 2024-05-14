@@ -1,4 +1,4 @@
-import { currentUser } from '@clerk/nextjs';
+import { ClerkLoaded, currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import { generateUsername } from './_actions/generate-username';
 import AccountSetupForm from './_components/account-setup-form';

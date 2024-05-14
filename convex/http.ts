@@ -51,6 +51,8 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
                 imageUrl: event.data.image_url || '',
                 clerkId: event.data.id,
                 email: event.data.email_addresses[0].email_address || '',
+                // TODO: add a check to see if username is in the isHero list
+                role: 'user',
             });
 
             break;
