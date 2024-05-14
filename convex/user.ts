@@ -1,4 +1,4 @@
-import { internalMutation, internalQuery, query } from './_generated/server';
+import { internalMutation, internalQuery, mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
 export const create = internalMutation({
@@ -8,9 +8,25 @@ export const create = internalMutation({
         clerkId: v.string(),
         email: v.string(),
         role: v.string(),
+        web3Wallet: v.string(),
     },
     handler: async (ctx, args) => {
         await ctx.db.insert('users', args);
+    },
+});
+
+export const updateUser = mutation({
+    args: {
+        username: v.string(),
+        imageUrl: v.string(),
+        clerkId: v.string(),
+        email: v.string(),
+        role: v.string(),
+        web3Wallet: v.string(),
+    },
+    handler: async (ctx, args) => {
+        // Call the internal mutation
+        await create(ctx, args);
     },
 });
 

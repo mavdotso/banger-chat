@@ -4,7 +4,6 @@ import React from 'react';
 import { useSignIn, useSignUp } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { catchClerkError } from '@/lib/utils';
-import { Circle, LoaderIcon } from 'lucide-react';
 import { Icons } from '@/components/icons';
 
 export default function OAuthLogin() {

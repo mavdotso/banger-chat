@@ -15,22 +15,27 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { catchClerkError } from '@/lib/utils';
-import { Web3WalletResource } from '@clerk/types';
+import verifyWallet from '@/lib/verifyWeb3Wallet';
+import { useMutationState } from '@/hooks/useMutationState';
+import { api } from '@/convex/_generated/api';
 
 type User = {
-    email: string;
     username: string;
+    imageUrl: string;
+    email: string;
     web3Wallet: string;
 };
 
-type UserSetupProps = Pick<User, 'email' | 'username' | 'web3Wallet'>;
+type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet'>;
 
 export default function AccountSetupForm({ username }: { username: string }) {
     const { user } = useUser();
     const router = useRouter();
+    const { mutate: updateUser } = useMutationState(api.user.updateUser);
 
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
         username: username,
+        imageUrl: user?.imageUrl || '',
         email: user?.emailAddresses[0].emailAddress || '',
         web3Wallet: user?.web3Wallets[0].web3Wallet || '',
     });
@@ -87,26 +92,6 @@ export default function AccountSetupForm({ username }: { username: string }) {
         }
     }
 
-    async function verifyWallet(wallet: Web3WalletResource) {
-        await wallet
-            .prepareVerification({
-                strategy: 'web3_metamask_signature',
-            })
-            .then((response) => console.log(response))
-            .catch((error) => {
-                catchClerkError(error);
-            });
-
-        await wallet
-            .attemptVerification({
-                signature: `${wallet.id}_${wallet.verification.nonce}`,
-            })
-            .then((response) => console.log(response))
-            .catch((error) => {
-                catchClerkError(error);
-            });
-    }
-
     // TODO: changing to Convex function
     // const { mutate: accountSetup, isLoading } = api.auth.accountSetup.useMutation({
     //     onSuccess: ({ success, username }) => {
@@ -146,10 +131,21 @@ export default function AccountSetupForm({ username }: { username: string }) {
         },
     });
 
-    function handleAccountSetup() {
-        // accountSetup({
-        //     email: userAccountData.email,
-        // });
+    // Updating the user if some data is different
+    async function accountSetup() {
+        try {
+            await updateUser(userAccountData);
+        } catch (error) {
+            console.log(error);
+            toast.error('Error');
+        } finally {
+            router.push(origin ? `${origin}` : '/');
+            toast.success(`Welcome to banger.chat ${username} !`);
+        }
+    }
+
+    async function handleAccountSetup() {
+        await accountSetup();
     }
 
     function handleSecurity(data: z.infer<typeof FormSchema>) {

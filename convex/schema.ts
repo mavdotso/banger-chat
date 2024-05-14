@@ -8,6 +8,7 @@ export default defineSchema({
         clerkId: v.string(),
         email: v.optional(v.string()),
         role: v.optional(v.string()),
+        web3Wallet: v.string(),
     })
         .index('by_clerkId', ['clerkId'])
         .index('by_username', ['username']),
