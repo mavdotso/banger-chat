@@ -7,8 +7,8 @@ export const create = internalMutation({
         imageUrl: v.string(),
         clerkId: v.string(),
         email: v.string(),
-        role: v.string(),
-        web3Wallet: v.string(),
+        role: v.optional(v.string()),
+        web3Wallet: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         await ctx.db.insert('users', args);
@@ -21,11 +21,12 @@ export const updateUser = mutation({
         imageUrl: v.string(),
         clerkId: v.string(),
         email: v.string(),
-        role: v.string(),
-        web3Wallet: v.string(),
+        role: v.optional(v.string()),
+        web3Wallet: v.optional(v.string()),
     },
     handler: async (ctx, args) => {
         // Call the internal mutation
+        if (!args.role) args.role === 'user';
         await create(ctx, args);
     },
 });

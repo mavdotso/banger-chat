@@ -1,4 +1,11 @@
-## MVP TODD:
+## BUGS:
+- [ ] Clerk - add missing details: username 
+- [ ] On registration redrect to complete account (/account)
+- [ ] User is not being created in Convex
+
+
+
+## MVP TODO:
 - [x] Connect Convex
 - [x] Connect Clerk
 - [x] Create schema

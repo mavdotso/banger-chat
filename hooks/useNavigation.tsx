@@ -25,8 +25,8 @@ export function useNavigation() {
                 count: unseenMessagesCount,
             },
             {
-                name: 'Profile',
-                href: '/profile',
+                name: 'Account',
+                href: '/account',
                 icon: <User />,
             },
         ],

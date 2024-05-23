@@ -2,7 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Globe, Loader, Lock, Plus, User2 } from 'lucide-react';
+import { Globe, Loader, Lock, Plus, User2, Wallet } from 'lucide-react';
 import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -24,20 +24,24 @@ type User = {
     imageUrl: string;
     email: string;
     web3Wallet: string;
+    clerkId: string;
 };
 
-type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet'>;
+type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet' | 'clerkId'>;
 
 export default function AccountSetupForm({ username }: { username: string }) {
     const { user } = useUser();
     const router = useRouter();
     const { mutate: updateUser } = useMutationState(api.user.updateUser);
 
+    console.log(user);
+
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
-        username: username,
+        username: user?.username ? username : '',
         imageUrl: user?.imageUrl || '',
         email: user?.emailAddresses[0].emailAddress || '',
-        web3Wallet: user?.web3Wallets[0].web3Wallet || '',
+        web3Wallet: user?.web3Wallets[0] ? user?.web3Wallets[0].web3Wallet || '' : '',
+        clerkId: user?.id || '',
     });
 
     const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,29 +175,33 @@ export default function AccountSetupForm({ username }: { username: string }) {
                         <span className="leading-7 text-muted-foreground ">Customize your profile</span>
                         <Card className="w-full p-6 px-8 bg-transparent rounded-2xl my-4 sm:mt-10">
                             <div className="flex flex-col gap-4">
-                                <div className="flex justify-between items-center">
-                                    <div className="w-full">
-                                        <Label htmlFor="username">Name</Label>
-                                        <div className=" flex items-center gap-2  w-full my-1 h-7">
-                                            <Lock className="h-4 w-4 text-[#4D4D4D]" />
-                                            <div className="flex-grow overflow-hidden outline-none text-[15px] text-accent-foreground break-words tracking-wide w-full select-none">
-                                                {`${getFullName(user?.firstName ?? '', user?.lastName ?? '')} ${'(' + userAccountData?.username + ')'}`}
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div className="flex justify-between items-center gap-4">
                                     <Avatar className="rounded-full outline outline-1 outline-border h-12 w-12 ">
                                         <AvatarImage src={user?.imageUrl} alt={user?.username ?? ''} className="object-cover" />
                                         <AvatarFallback>
                                             <User2 className="h-5 w-5" />
                                         </AvatarFallback>
                                     </Avatar>
+                                    <div className="w-full">
+                                        <Label htmlFor="username">Username</Label>
+                                        <div className="flex">
+                                            <Input
+                                                name="username"
+                                                className="select-none max-h-[100px]"
+                                                maxLength={200}
+                                                value={userAccountData.username}
+                                                onChange={handleFieldChange}
+                                                placeholder="Your username"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
                                 <Label htmlFor="email">Email</Label>
-                                <div className="flex gap-2 ">
+                                <div className="flex">
                                     <Input
                                         name="email"
                                         className="select-none max-h-[100px]"
-                                        maxLength={100}
+                                        maxLength={200}
                                         value={userAccountData.email}
                                         onChange={handleFieldChange}
                                         placeholder="Your email address"
@@ -210,7 +218,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
                                         placeholder="Your web3 wallet address"
                                     />
                                     <Button className="rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleConnectWallet}>
-                                        Connect wallet
+                                        <Wallet />
                                         <span className="sr-only">Connect wallet</span>
                                     </Button>
                                 </div>
