@@ -1,7 +1,8 @@
 ## BUGS:
-- [ ] Clerk - add missing details: username 
-- [ ] On registration redrect to complete account (/account)
-- [ ] User is not being created in Convex
+- [x] Clerk - add missing details: username 
+- [x] On registration redrect to complete account (/account)
+- [x] User is not being created in Convex
+- [ ] Username is being displayed weirdly
 
 
 
@@ -18,6 +19,7 @@
     - [ ] @ tag someone
         - [ ] tag notifications
 - [ ] User registration
+    - [ ] WalletConnect 
 - [ ] Token-gating chats
     - [ ] Get a copy of database
     - [ ] Connect & auth user wallet
