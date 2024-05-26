@@ -9,7 +9,6 @@ import { Icons } from '@/components/icons';
 export default function OAuthLogin() {
     const [isLoading, setIsLoading] = React.useState<boolean | null>(null);
     const { signIn, isLoaded: signInLoaded } = useSignIn();
-    const { signUp } = useSignUp();
 
     async function oauthSignInGoogle() {
         if (!signInLoaded) return null;
@@ -55,7 +54,7 @@ export default function OAuthLogin() {
 
     return (
         <div className="flex flex-col gap-2">
-            <Button
+            {/* <Button
                 aria-label={`Continue with Google`}
                 variant="outline"
                 className="bg-transparent flex justify-center items-center py-5 px-3 rounded-xl transform active:scale-95 transition-transform cursor-pointer select-none h-16 w-full text-base hover:bg-transparent border-[#333333] text-white hover:text-white"
@@ -64,7 +63,7 @@ export default function OAuthLogin() {
             >
                 {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Icons.googleColor className="mr-2 h-4 w-4" aria-hidden="true" />}
                 Continue with Google
-            </Button>
+            </Button> */}
             <Button
                 aria-label={`Continue with Twitter`}
                 variant="outline"
@@ -72,7 +71,7 @@ export default function OAuthLogin() {
                 onClick={() => void oauthSignInTwitter()}
                 disabled={isLoading!}
             >
-                {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Icons.twitter className="mr-2 h-4 w-4" />}
+                {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Icons.x className="mr-2 h-4 w-4" />}
                 Continue with X (Twitter)
             </Button>
             <Button

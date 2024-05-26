@@ -29,7 +29,7 @@ type User = {
 
 type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet' | 'clerkId'>;
 
-export default function AccountSetupForm({ username }: { username: string }) {
+export default function AccountSetupForm() {
     const { user } = useUser();
     const router = useRouter();
     const { mutate: updateUser } = useMutationState(api.user.updateUser);
@@ -37,10 +37,10 @@ export default function AccountSetupForm({ username }: { username: string }) {
     console.log(user);
 
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
-        username: user?.username ? username : '',
+        username: user?.username || '',
         imageUrl: user?.imageUrl || '',
-        email: user?.emailAddresses[0].emailAddress || '',
-        web3Wallet: user?.web3Wallets[0] ? user?.web3Wallets[0].web3Wallet || '' : '',
+        email: user?.primaryEmailAddress?.emailAddress || '',
+        web3Wallet: user?.primaryWeb3Wallet?.web3Wallet || '',
         clerkId: user?.id || '',
     });
 
@@ -144,7 +144,7 @@ export default function AccountSetupForm({ username }: { username: string }) {
             toast.error('Error');
         } finally {
             router.push(origin ? `${origin}` : '/');
-            toast.success(`Welcome to banger.chat ${username} !`);
+            toast.success(`Welcome to banger.chat ${user?.username}!`);
         }
     }
 
@@ -156,14 +156,6 @@ export default function AccountSetupForm({ username }: { username: string }) {
         setUserAccountData({
             ...userAccountData,
         });
-    }
-
-    function getFullName(firstName: string, lastName: string) {
-        if (!lastName || lastName === undefined || lastName === null || lastName === '') {
-            return firstName;
-        }
-
-        return `${firstName} ${lastName}`;
     }
 
     return (

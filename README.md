@@ -39,3 +39,4 @@
     - [ ] Send new tweets by a hero into channel chat
     - [ ] DMs 
 - [ ] Create a list on Twitter with your deck / display the list with tweets in a separate window on the app
+- [ ] Card holder giveaways
