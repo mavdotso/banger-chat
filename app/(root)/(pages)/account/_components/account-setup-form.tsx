@@ -2,7 +2,7 @@
 
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Globe, Loader, Lock, Plus, User2, Wallet } from 'lucide-react';
+import { User2, Wallet } from 'lucide-react';
 import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';

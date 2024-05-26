@@ -18,6 +18,7 @@ export default function OAuthLogin() {
                 strategy: 'oauth_google',
                 redirectUrl: '/sso-callback',
                 redirectUrlComplete: '/',
+                continueSignUp: true,
             });
         } catch (error) {
             setIsLoading(false);
@@ -33,6 +34,7 @@ export default function OAuthLogin() {
                 strategy: 'oauth_x',
                 redirectUrl: '/sso-callback',
                 redirectUrlComplete: '/',
+                continueSignUp: true,
             });
         } catch (error) {
             setIsLoading(false);

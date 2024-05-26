@@ -45,16 +45,30 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
                 console.log(`Updating user ${event.data.id} with: ${event.data}`);
             }
         case 'user.updated': {
-            console.log('Creating/Updating User:', event.data.id);
-            await ctx.runMutation(internal.user.create, {
-                username: event.data.username || '',
-                imageUrl: event.data.image_url || '',
+            const user = await ctx.runQuery(internal.user.get, {
                 clerkId: event.data.id,
-                email: event.data.email_addresses[0].email_address || '',
-                web3Wallet: event.data.web3_wallets[0].web3_wallet || '',
-                // TODO: add a check to see if username is in the isHero list
-                role: 'user',
             });
+
+            if (user) {
+                console.log(`Updating user ${event.data.id} with: ${event.data}`);
+                await ctx.runMutation(internal.user.update, {
+                    username: event.data.username || '',
+                    imageUrl: event.data.image_url || '',
+                    clerkId: user.clerkId,
+                    email: event.data.email_addresses[0]?.email_address || '',
+                    web3Wallet: event.data.web3_wallets[0]?.web3_wallet || '',
+                });
+            } else {
+                await ctx.runMutation(internal.user.create, {
+                    username: event.data.username || '',
+                    imageUrl: event.data.image_url || '',
+                    clerkId: event.data.id,
+                    email: event.data.email_addresses[0]?.email_address || '',
+                    web3Wallet: event.data.web3_wallets[0]?.web3_wallet || '',
+                    // TODO: add a check to see if username is in the isHero list
+                    role: 'user',
+                });
+            }
 
             break;
         }
