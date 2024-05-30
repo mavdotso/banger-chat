@@ -2,9 +2,8 @@ import { Web3WalletResource, PrepareWeb3WalletVerificationParams, AttemptWeb3Wal
 import { verifyMessage, signMessage } from '@wagmi/core';
 import { wagmiConfig } from './wagmi';
 
-async function verifyWallet(web3WalletResource: Web3WalletResource) {
+export default async function verifyWallet(web3WalletResource: Web3WalletResource) {
     try {
-        // Step 1: Prepare the verification
         const prepareParams: PrepareWeb3WalletVerificationParams = { strategy: 'web3_metamask_signature' };
         const preparedResource = await web3WalletResource.prepareVerification(prepareParams);
         const nonce = preparedResource.verification.nonce;
@@ -13,7 +12,6 @@ async function verifyWallet(web3WalletResource: Web3WalletResource) {
             throw new Error('Nonce is null or undefined');
         }
 
-        // Step 2: Sign the nonce
         const signature = await signMessage(wagmiConfig, {
             message: nonce,
         });
@@ -24,10 +22,8 @@ async function verifyWallet(web3WalletResource: Web3WalletResource) {
             throw new Error('Invalid Ethereum address format');
         }
 
-        // Step 3: Verify the signed message
         const isValid = await verifyMessage(wagmiConfig, {
-            //@ts-ignore
-            address,
+            address: address as `0x{string}`,
             message: nonce,
             signature,
         });
@@ -36,7 +32,6 @@ async function verifyWallet(web3WalletResource: Web3WalletResource) {
             throw new Error('Signature verification failed');
         }
 
-        // Step 4: Attempt the verification
         const attemptParams: AttemptWeb3WalletVerificationParams = { signature };
         const verifiedResource = await web3WalletResource.attemptVerification(attemptParams);
 
@@ -45,5 +40,3 @@ async function verifyWallet(web3WalletResource: Web3WalletResource) {
         console.error('Verification failed:', error);
     }
 }
-
-export default verifyWallet;

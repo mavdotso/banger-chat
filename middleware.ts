@@ -20,14 +20,6 @@ export default authMiddleware({
         if (!user) {
             throw new Error('User not found.');
         }
-
-        if (!user.privateMetadata.role) {
-            await clerkClient.users.updateUserMetadata(auth.userId, {
-                privateMetadata: {
-                    role: 'user',
-                },
-            });
-        }
     },
 });
 

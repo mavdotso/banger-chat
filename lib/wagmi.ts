@@ -1,9 +1,6 @@
-// config/index.tsx
-
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-
 import { cookieStorage, createStorage } from 'wagmi';
-import { mainnet, sepolia } from 'wagmi/chains';
+import { blast } from 'wagmi/chains';
 
 export const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!;
 
@@ -14,7 +11,7 @@ const metadata = {
     icons: ['https://avatars.githubusercontent.com/u/37784886'],
 };
 
-const chains = [mainnet, sepolia] as const;
+const chains = [blast] as const;
 export const wagmiConfig = defaultWagmiConfig({
     chains,
     projectId,

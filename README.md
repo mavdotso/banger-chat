@@ -13,17 +13,16 @@
 - [x] Create UI scaffolding
 - [ ] Chat features
     - [ ] ~~Create chat~~
-    - [ ] Claim chat ownership (?)
-    - [ ] Chats list
+    - [ ] ~~Claim chat ownership~~
+    - [x] Chats list
     - [ ] Mute / ban features
     - [ ] @ tag someone
         - [ ] tag notifications
-- [ ] User registration
-    - [ ] WalletConnect 
+- [x] User registration
+    - [x] WalletConnect 
 - [ ] Token-gating chats
     - [ ] Get a copy of database
-    - [ ] Connect & auth user wallet
-    - [ ] 
+    - [x] Connect & auth user wallet
 - [ ] Create user roles
     - [ ] Admin
     - [ ] Mods
@@ -33,7 +32,7 @@
 ## Later TODOs:
 - [ ] Chat:
     - [ ] File uploads
-    - [ ] Emojis
+    - [x] Emojis
     - [ ] Gifs
     - [ ] Avatar color change based on the highest-rank card you have
     - [ ] Send new tweets by a hero into channel chat
