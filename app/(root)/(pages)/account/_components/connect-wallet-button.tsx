@@ -8,19 +8,19 @@ import { useAccount } from 'wagmi';
 import { Label } from '@/components/ui/label';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Wallet } from 'lucide-react';
-import type { UserResource } from '@clerk/types';
+import { useUser } from '@clerk/nextjs';
 
 type ConnectWalletButtonProps = {
-    user: UserResource;
     userAccountData: User;
     setUserAccountData: Dispatch<SetStateAction<UserSetupProps>>;
     handleFieldChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleVerifyWallet: () => void;
 };
 
-export default function ConnectWalletButton({ user, userAccountData, setUserAccountData, handleFieldChange, handleVerifyWallet }: ConnectWalletButtonProps) {
+export default function ConnectWalletButton({ userAccountData, setUserAccountData, handleFieldChange, handleVerifyWallet }: ConnectWalletButtonProps) {
     const { open } = useWeb3Modal();
-    const { address, isConnecting, isDisconnected } = useAccount();
+    const { user } = useUser();
+    const { address } = useAccount();
     const [isVerified, setIsVerified] = useState(false);
 
     useEffect(() => {
@@ -31,14 +31,14 @@ export default function ConnectWalletButton({ user, userAccountData, setUserAcco
 
     useEffect(() => {
         if (address) {
-            const currentAddress = user.web3Wallets.find((wallet) => wallet.web3Wallet.toLowerCase() === address.toLowerCase());
+            const currentAddress = user!.web3Wallets.find((wallet) => wallet.web3Wallet.toLowerCase() === address.toLowerCase());
             if (currentAddress?.verification.status === 'verified') {
                 setIsVerified(true);
             } else {
                 setIsVerified(false);
             }
         }
-    }, [user.web3Wallets, address]);
+    }, [user, address]);
 
     return (
         <>

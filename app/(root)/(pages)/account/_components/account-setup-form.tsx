@@ -20,7 +20,6 @@ import { useMutationState } from '@/hooks/useMutationState';
 import { api } from '@/convex/_generated/api';
 import ConnectWalletButton from './connect-wallet-button';
 import Web3ModalProvider from '@/providers/walletconnect-provider';
-import { Icons } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 
 export type User = {
@@ -197,7 +196,6 @@ export default function AccountSetupForm() {
                                     {user && (
                                         <Web3ModalProvider>
                                             <ConnectWalletButton
-                                                user={user}
                                                 userAccountData={userAccountData}
                                                 setUserAccountData={setUserAccountData}
                                                 handleFieldChange={handleFieldChange}
