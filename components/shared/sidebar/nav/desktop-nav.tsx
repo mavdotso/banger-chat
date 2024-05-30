@@ -25,7 +25,7 @@ export default function DesktopNav() {
                                             <Button size="icon" variant={path.active ? 'default' : 'outline'}>
                                                 {path.icon}
                                             </Button>
-                                            {path.count ? <Badge className="absolute left-6 bottom-7 px-2">{path.count}</Badge> : null}
+                                            {/* {path.count ? <Badge className="absolute left-6 bottom-7 px-2">{path.count}</Badge> : null} */}
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>{path.name}</p>

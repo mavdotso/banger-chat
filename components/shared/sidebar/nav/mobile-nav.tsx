@@ -1,13 +1,11 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ui/theme/theme-toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useChat } from '@/hooks/useChat';
 import { useNavigation } from '@/hooks/useNavigation';
-import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 
 export default function MobileNav() {
@@ -29,7 +27,7 @@ export default function MobileNav() {
                                             <Button size="icon" variant={path.active ? 'default' : 'outline'}>
                                                 {path.icon}
                                             </Button>
-                                            {path.count ? <Badge className="absolute left-7 bottom-6">{path.count}</Badge> : null}
+                                            {/* {path.count ? <Badge className="absolute left-7 bottom-6">{path.count}</Badge> : null} */}
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>{path.name}</p>
