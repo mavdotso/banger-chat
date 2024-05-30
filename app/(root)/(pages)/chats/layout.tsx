@@ -31,6 +31,7 @@ export default function ChatsLayout({ children }: Props) {
                                     key={chat.chat._id}
                                     id={chat.chat._id}
                                     name={chat.chat.name || ''}
+                                    imageUrl={chat.chat.imageUrl || ''}
                                     lastMessageSender={chat.lastMessage?.sender}
                                     lastMessageContent={chat.lastMessage?.content}
                                 />

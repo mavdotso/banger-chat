@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { Id } from '@/convex/_generated/dataModel';
 import Link from 'next/link';
@@ -7,16 +7,18 @@ import React from 'react';
 type Props = {
     id: Id<'chats'>;
     name: string;
+    imageUrl: string;
     lastMessageSender?: string;
     lastMessageContent?: string;
 };
 
-export default function ChatItem({ id, name, lastMessageSender, lastMessageContent }: Props) {
+export default function ChatItem({ id, name, imageUrl, lastMessageSender, lastMessageContent }: Props) {
     return (
         <Link href={`/chats/${id}`} className="w-full">
             <Card className="p-2 flex flex-row items-center justify-between">
                 <div className="flex flex-row items-center gap-4 truncate">
                     <Avatar>
+                        <AvatarImage src={imageUrl} />
                         <AvatarFallback>{name.charAt(0).toLocaleUpperCase()}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col truncate">
