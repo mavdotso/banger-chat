@@ -20,6 +20,8 @@ import { useMutationState } from '@/hooks/useMutationState';
 import { api } from '@/convex/_generated/api';
 import ConnectWalletButton from './connect-wallet-button';
 import Web3ModalProvider from '@/providers/walletconnect-provider';
+import { Icons } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
 
 export type User = {
     username: string;
@@ -102,22 +104,6 @@ export default function AccountSetupForm() {
                 break;
         }
     }
-    // TODO: changing to Convex function
-    // const { mutate: accountSetup, isLoading } = api.auth.accountSetup.useMutation({
-    //     onSuccess: ({ success, username }) => {
-    //         if (success) {
-    //             router.push(origin ? `${origin}` : '/');
-    //         }
-    //         toast.success(`Welcome to banger.chat ${username} !`);
-    //     },
-    //     onError: (err: any) => {
-    //         toast.error('AuthCallBack: Something went wrong!');
-    //         if (err.data?.code === 'UNAUTHORIZED') {
-    //             router.push('/login');
-    //         }
-    //     },
-    //     retry: false,
-    // });
 
     const FormSchema = z.object({
         url: z
@@ -150,7 +136,7 @@ export default function AccountSetupForm() {
             toast.error('Error');
         } finally {
             router.push(origin ? `${origin}` : '/');
-            toast.success(`Welcome to banger.chat ${user?.username}!`);
+            toast.success(`Changes saved`);
         }
     }
 
@@ -194,7 +180,9 @@ export default function AccountSetupForm() {
                                         </div>
                                     </div>
                                 </div>
-                                <Label htmlFor="email">Email</Label>
+                                <Label className="flex gap-2 items-center" htmlFor="email">
+                                    Email <Badge>Optional</Badge>
+                                </Label>
                                 <div className="flex">
                                     <Input
                                         name="email"
@@ -220,10 +208,9 @@ export default function AccountSetupForm() {
                                 </Suspense>
                             </div>
                         </Card>
-                        <Button className="w-full mt-4 rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleAccountSetup}>
-                            {/* {isLoading && <Loader className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />} */}
-                            Create my profile
-                            <span className="sr-only">Create my profile</span>
+                        <Button onClick={handleAccountSetup}>
+                            Save changes
+                            <span className="sr-only">Save changes</span>
                         </Button>
                     </div>
                 </form>

@@ -5,7 +5,6 @@ import { api } from '@/convex/_generated/api';
 import { useQuery } from 'convex/react';
 import { Loader2 } from 'lucide-react';
 import ChatItem from './_components/chat-item';
-import SidebarWrapper from '@/components/shared/sidebar/sidebar-wrapper';
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -13,7 +12,7 @@ export default function ChatsLayout({ children }: Props) {
     const chats = useQuery(api.chats.get);
 
     return (
-        <SidebarWrapper>
+        <>
             <ItemList
                 title="Chats"
                 action={
@@ -43,6 +42,6 @@ export default function ChatsLayout({ children }: Props) {
                 )}
             </ItemList>
             {children}
-        </SidebarWrapper>
+        </>
     );
 }

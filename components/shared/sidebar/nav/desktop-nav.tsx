@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { ThemeToggle } from '@/components/ui/theme/theme-toggle';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useNavigation } from '@/hooks/useNavigation';
-import { UserButton } from '@clerk/nextjs';
+import { User } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DesktopNav() {
@@ -39,7 +39,6 @@ export default function DesktopNav() {
             </nav>
             <div className="flex flex-col items-center gap-4">
                 <ThemeToggle />
-                <UserButton />
             </div>
         </Card>
     );

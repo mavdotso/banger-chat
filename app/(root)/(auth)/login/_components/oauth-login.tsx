@@ -14,9 +14,9 @@ export default function OAuthLogin() {
     const user = useUser();
     const router = useRouter();
 
-    useEffect(() => {
-        if (user.isSignedIn) router.push('/chats');
-    }, [user, router]);
+    // useEffect(() => {
+    //     if (user.isSignedIn) router.push('/chats');
+    // }, [user, router]);
 
     async function oauthSignInTwitter() {
         if (!signInLoaded) return null;
@@ -55,17 +55,17 @@ export default function OAuthLogin() {
             <Button
                 aria-label={`Continue with Twitter`}
                 variant="outline"
-                className="bg-transparent flex justify-center items-center py-5 px-3 rounded-xl transform active:scale-95 transition-transform cursor-pointer select-none h-16 w-full text-base hover:bg-transparent border-[#333333] text-white hover:text-white"
+                className="bg-transparent  flex justify-center items-center py-5 px-3 rounded-xl transform active:scale-95 transition-transform cursor-pointer select-none h-16 w-full text-base hover:bg-primary/10"
                 onClick={() => void oauthSignInTwitter()}
                 disabled={isLoading!}
             >
-                {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Icons.x className="mr-2 h-4 w-4" />}
+                {isLoading ? <Icons.spinner className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> : <Icons.x className="mr-2 h-4 w-4 fill-foreground" />}
                 Continue with X (Twitter)
             </Button>
             <Button
                 aria-label={`Continue with Metamask`}
                 variant="outline"
-                className="bg-transparent flex justify-center items-center py-5 px-3 rounded-xl transform active:scale-95 transition-transform cursor-pointer select-none h-16 w-full text-base hover:bg-transparent border-[#333333] text-white hover:text-white"
+                className="bg-transparent  flex justify-center items-center py-5 px-3 rounded-xl transform active:scale-95 transition-transform cursor-pointer select-none h-16 w-full text-base hover:bg-primary/10 "
                 onClick={() => void oauthSignInMetamask()}
                 disabled={isLoading!}
             >

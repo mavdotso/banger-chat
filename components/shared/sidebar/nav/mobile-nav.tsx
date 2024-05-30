@@ -40,9 +40,6 @@ export default function MobileNav() {
                         );
                     })}
                     <li>
-                        <UserButton />
-                    </li>
-                    <li>
                         <ThemeToggle />
                     </li>
                 </ul>

@@ -53,7 +53,7 @@ export default function ConnectWalletButton({ user, userAccountData, setUserAcco
                         </Button>
                     </>
                 ) : (
-                    <Button className="w-full mt-4 rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={() => open()}>
+                    <Button className="w-full" onClick={() => open()}>
                         Connect wallet
                         <span className="sr-only">Connect wallet</span>
                     </Button>
