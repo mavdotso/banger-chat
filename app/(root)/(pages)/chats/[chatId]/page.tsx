@@ -30,7 +30,7 @@ export default function ChatPage({ params: { chatId } }: Props) {
         <p className="w-full h-full flex items-center justify-center">Chat not found</p>
     ) : (
         <ChatContainer>
-            <LeaveChatDialog chatId={chatId} open={leaveChatDialogOpen} setOpen={setLeaveChatDialogOpen} />
+            {/* <LeaveChatDialog chatId={chatId} open={leaveChatDialogOpen} setOpen={setLeaveChatDialogOpen} /> */}
             <Header
                 name={chat.name}
                 imageUrl={chat.imageUrl}

@@ -2,7 +2,7 @@
 - [x] Clerk - add missing details: username 
 - [x] On registration redrect to complete account (/account)
 - [x] User is not being created in Convex
-- [ ] Username is being displayed weirdly
+- [x] Username is being displayed weirdly
 
 
 
@@ -10,10 +10,10 @@
 - [x] Connect Convex
 - [x] Connect Clerk
 - [x] Create schema
-- [ ] Create UI scaffolding
+- [x] Create UI scaffolding
 - [ ] Chat features
     - [ ] ~~Create chat~~
-    - [ ] Claim chat ownership
+    - [ ] Claim chat ownership (?)
     - [ ] Chats list
     - [ ] Mute / ban features
     - [ ] @ tag someone

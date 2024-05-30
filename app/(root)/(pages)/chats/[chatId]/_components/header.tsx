@@ -31,7 +31,8 @@ export default function Header({ imageUrl, name, options, setCallType }: Props) 
                 </Avatar>
                 <h2 className="font-semibold">{name}</h2>
             </div>
-            <div className="flex gap-2">
+            {/* TODO: expand chat features */}
+            {/* <div className="flex gap-2">
                 <Button variant="secondary" size="icon" onClick={() => setCallType('audio')}>
                     <Phone />
                 </Button>
@@ -62,7 +63,7 @@ export default function Header({ imageUrl, name, options, setCallType }: Props) 
                         </DropdownMenuContent>
                     </DropdownMenu>
                 ) : null}
-            </div>
+            </div> */}
         </Card>
     );
 }

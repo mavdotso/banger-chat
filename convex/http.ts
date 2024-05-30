@@ -52,17 +52,17 @@ const handleClerkWebhook = httpAction(async (ctx, req) => {
             if (user) {
                 console.log(`Updating user ${event.data.id} with: ${event.data}`);
                 await ctx.runMutation(internal.user.update, {
+                    clerkId: user.clerkId,
                     username: event.data.username || '',
                     imageUrl: event.data.image_url || '',
-                    clerkId: user.clerkId,
                     email: event.data.email_addresses[0]?.email_address || '',
                     web3Wallet: event.data.web3_wallets[0]?.web3_wallet || '',
                 });
             } else {
                 await ctx.runMutation(internal.user.create, {
+                    clerkId: event.data.id,
                     username: event.data.username || '',
                     imageUrl: event.data.image_url || '',
-                    clerkId: event.data.id,
                     email: event.data.email_addresses[0]?.email_address || '',
                     web3Wallet: event.data.web3_wallets[0]?.web3_wallet || '',
                     // TODO: add a check to see if username is in the isHero list
