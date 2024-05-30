@@ -9,6 +9,7 @@ export function useNavigation() {
 
     const chats = useQuery(api.chats.get);
 
+    // TODO: debug
     const unseenMessagesCount = useMemo(() => {
         return chats?.reduce((acc, curr) => {
             return acc + curr.unseenCount;
@@ -22,7 +23,6 @@ export function useNavigation() {
                 href: '/chats',
                 icon: <MessageSquare />,
                 active: pathname.startsWith('/chats'),
-                count: unseenMessagesCount,
             },
             {
                 name: 'Account',
@@ -30,7 +30,7 @@ export function useNavigation() {
                 icon: <User />,
             },
         ],
-        [pathname, unseenMessagesCount]
+        [pathname]
     );
 
     return paths;

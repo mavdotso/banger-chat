@@ -3,6 +3,7 @@
 - [x] On registration redrect to complete account (/account)
 - [x] User is not being created in Convex
 - [x] Username is being displayed weirdly
+- [ ] Update username in the DB and Clerk
 
 
 
