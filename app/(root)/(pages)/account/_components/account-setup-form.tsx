@@ -3,7 +3,7 @@
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User2, Wallet } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,8 +18,10 @@ import { catchClerkError } from '@/lib/utils';
 import verifyWallet from '@/lib/verifyWeb3Wallet';
 import { useMutationState } from '@/hooks/useMutationState';
 import { api } from '@/convex/_generated/api';
+import ConnectWalletButton from './connect-wallet-button';
+import Web3ModalProvider from '@/providers/walletconnect-provider';
 
-type User = {
+export type User = {
     username: string;
     imageUrl: string;
     email: string;
@@ -27,14 +29,12 @@ type User = {
     clerkId: string;
 };
 
-type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet' | 'clerkId'>;
+export type UserSetupProps = Pick<User, 'username' | 'imageUrl' | 'email' | 'web3Wallet' | 'clerkId'>;
 
 export default function AccountSetupForm() {
     const { user } = useUser();
     const router = useRouter();
     const { mutate: updateUser } = useMutationState(api.user.updateUser);
-
-    console.log(user);
 
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
         username: user?.username || '',
@@ -52,33 +52,40 @@ export default function AccountSetupForm() {
         });
     };
 
-    async function handleConnectWallet() {
+    async function handleVerifyWallet() {
         if (!user) return;
 
-        let wallet = user.web3Wallets.find((wallet) => wallet.web3Wallet === userAccountData.web3Wallet);
+        let walletResource = user.web3Wallets.find((wallet) => wallet.web3Wallet.toLowerCase() === userAccountData.web3Wallet.toLowerCase());
 
-        if (!wallet) {
-            // Create a new wallet if there's no wallet associated with this user's account
-            await user
-                .createWeb3Wallet({ web3Wallet: userAccountData.web3Wallet })
-                .then((response) => console.log(response))
-                .catch((error) => {
-                    catchClerkError(error);
-                });
-
-            wallet = user.web3Wallets.find((wallet) => wallet.web3Wallet === userAccountData.web3Wallet);
+        if (!walletResource) {
+            console.log("Didn't find the wallet to verify. Creating a new wallet...");
+            try {
+                walletResource = await user.createWeb3Wallet({ web3Wallet: userAccountData.web3Wallet });
+                console.log('New wallet created:', walletResource);
+            } catch (error) {
+                catchClerkError(error);
+                console.log('Failed to create a new wallet');
+                toast.error('Failed to create a new wallet, please try again');
+                return;
+            }
         }
 
-        await verifyWallet(wallet!);
+        if (!walletResource) {
+            console.log('Wallet resource is still undefined after creation attempt');
+            toast.error('Wallet resource is undefined, please try again');
+            return;
+        }
 
-        switch (wallet!.verification.status) {
+        await verifyWallet(walletResource);
+
+        switch (walletResource.verification.status) {
             case 'unverified':
                 console.log('Wallet is unverified');
                 toast.error('Wallet is unverified, please try again');
                 break;
             case 'verified':
-                console.log('Sucessfully verified the wallet');
-                toast.success('Sucessfully verified the wallet');
+                console.log('Successfully verified the wallet');
+                toast.success('Successfully verified the wallet');
                 break;
             case 'transferable':
                 console.log('The wallet is transferable?');
@@ -95,7 +102,6 @@ export default function AccountSetupForm() {
                 break;
         }
     }
-
     // TODO: changing to Convex function
     // const { mutate: accountSetup, isLoading } = api.auth.accountSetup.useMutation({
     //     onSuccess: ({ success, username }) => {
@@ -199,21 +205,19 @@ export default function AccountSetupForm() {
                                         placeholder="Your email address"
                                     />
                                 </div>
-                                {/* TODO: Add verification */}
-                                <Label htmlFor="web3Wallet">Web3 Wallet address</Label>
-                                <div className="flex gap-2 ">
-                                    <Input
-                                        name="web3Wallet"
-                                        className="select-none max-h-[100px]"
-                                        value={userAccountData.web3Wallet}
-                                        onChange={handleFieldChange}
-                                        placeholder="Your web3 wallet address"
-                                    />
-                                    <Button className="rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleConnectWallet}>
-                                        <Wallet />
-                                        <span className="sr-only">Connect wallet</span>
-                                    </Button>
-                                </div>
+                                <Suspense fallback={<p>Loading...</p>}>
+                                    {user && (
+                                        <Web3ModalProvider>
+                                            <ConnectWalletButton
+                                                user={user}
+                                                userAccountData={userAccountData}
+                                                setUserAccountData={setUserAccountData}
+                                                handleFieldChange={handleFieldChange}
+                                                handleVerifyWallet={handleVerifyWallet}
+                                            />
+                                        </Web3ModalProvider>
+                                    )}
+                                </Suspense>
                             </div>
                         </Card>
                         <Button className="w-full mt-4 rounded-xl bg-foreground hover:bg-foreground select-none text-white dark:text-black" onClick={handleAccountSetup}>

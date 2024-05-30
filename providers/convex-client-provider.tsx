@@ -9,6 +9,8 @@ type Props = {
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL || '';
 
+if (!CONVEX_URL) throw new Error('CONVEX URL is not defined');
+
 const convex = new ConvexReactClient(CONVEX_URL);
 
 export default function ConvexClientProvider({ children }: Props) {
