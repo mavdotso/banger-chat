@@ -1,5 +1,5 @@
 import { ConvexError, v } from 'convex/values';
-import { action, httpAction, internalAction, internalMutation, internalQuery, mutation } from './_generated/server';
+import { action, internalAction, internalMutation, internalQuery } from './_generated/server';
 import { getUserByClerkId } from './_utils';
 import { internal } from './_generated/api';
 

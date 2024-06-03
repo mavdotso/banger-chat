@@ -8,7 +8,7 @@ import Uploader from '@/components/shared/uploader';
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
 import { ConvexError } from 'convex/values';
-import { File, Image } from 'lucide-react';
+import { File, ImageIcon } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useChat } from '@/hooks/useChat';
 import { toast } from 'sonner';
@@ -57,7 +57,7 @@ export default function UploadFileDialog({ open, toggle, type }: Props) {
         <Dialog open={open} onOpenChange={(open) => toggle(open)}>
             <DialogTrigger asChild>
                 <Button size="icon" variant="outline">
-                    {type === 'image' ? <Image /> : <File />}
+                    {type === 'image' ? <ImageIcon /> : <File />}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
