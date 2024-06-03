@@ -62,121 +62,121 @@ export const get = query({
     },
 });
 
-export const createChat = mutation({
-    args: {
-        name: v.string(),
-        chatMembers: v.array(v.id('users')),
-    },
-    handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
+// Don't need creating chats, will be created by default
+// export const createChat = mutation({
+//     args: {
+//         name: v.string(),
+//         chatMembers: v.array(v.id('users')),
+//     },
+//     handler: async (ctx, args) => {
+//         const identity = await ctx.auth.getUserIdentity();
 
-        if (!identity) {
-            throw new Error('Unauthorized');
-        }
+//         if (!identity) {
+//             throw new Error('Unauthorized');
+//         }
 
-        const currentUser = await getUserByClerkId({
-            ctx,
-            clerkId: identity.subject,
-        });
+//         const currentUser = await getUserByClerkId({
+//             ctx,
+//             clerkId: identity.subject,
+//         });
 
-        if (!currentUser) {
-            throw new ConvexError('User not found');
-        }
+//         if (!currentUser) {
+//             throw new ConvexError('User not found');
+//         }
 
-        const isHero = await ctx.db
-            .query('heroes')
-            .withIndex('by_user', (q) => q.eq('user', currentUser._id))
-            .first();
+//         // const isHero = await ctx.db
+//         //     .query('heroes')
+//         //     .withIndex('by_user', (q) => q.eq('user', currentUser._id))
+//         //     .first();
 
-        if (!isHero) {
-            throw new ConvexError("User is not a hero and can't create a chat");
-        }
+//         // if (!isHero) {
+//         //     throw new ConvexError("User is not a hero and can't create a chat");
+//         // }
 
-        const chatId = await ctx.db.insert('chats', {
-            admin: currentUser._id,
-            cardAddress: isHero.card,
-            name: args.name,
-        });
+//         const chatId = await ctx.db.insert('chats', {
+//             admin: currentUser._id,
+//             name: args.name,
+//         });
 
-        await Promise.all(
-            [...args.chatMembers, currentUser._id].map(
-                async (memberId) =>
-                    await ctx.db.insert('chatMembers', {
-                        memberId,
-                        chatId,
-                    })
-            )
-        );
-    },
-});
+//         await Promise.all(
+//             [...args.chatMembers, currentUser._id].map(
+//                 async (memberId) =>
+//                     await ctx.db.insert('chatMembers', {
+//                         memberId,
+//                         chatId,
+//                     })
+//             )
+//         );
+//     },
+// });
 
-export const deleteChat = mutation({
-    args: {
-        chatId: v.id('chats'),
-    },
-    handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
+// export const deleteChat = mutation({
+//     args: {
+//         chatId: v.id('chats'),
+//     },
+//     handler: async (ctx, args) => {
+//         const identity = await ctx.auth.getUserIdentity();
 
-        if (!identity) {
-            throw new ConvexError('Unauthorized');
-        }
+//         if (!identity) {
+//             throw new ConvexError('Unauthorized');
+//         }
 
-        const currentUser = await getUserByClerkId({
-            ctx,
-            clerkId: identity.subject,
-        });
+//         const currentUser = await getUserByClerkId({
+//             ctx,
+//             clerkId: identity.subject,
+//         });
 
-        if (!currentUser) {
-            throw new ConvexError('User not found');
-        }
+//         if (!currentUser) {
+//             throw new ConvexError('User not found');
+//         }
 
-        const isHero = await ctx.db
-            .query('heroes')
-            .withIndex('by_user', (q) => q.eq('user', currentUser._id))
-            .first();
+//         const isHero = await ctx.db
+//             .query('heroes')
+//             .withIndex('by_user', (q) => q.eq('user', currentUser._id))
+//             .first();
 
-        if (!isHero) {
-            throw new ConvexError("User is not a hero and can't delete a chat");
-        }
+//         if (!isHero) {
+//             throw new ConvexError("User is not a hero and can't delete a chat");
+//         }
 
-        const chat = await ctx.db.get(args.chatId);
+//         const chat = await ctx.db.get(args.chatId);
 
-        if (!chat) {
-            throw new ConvexError('Chat is not found');
-        }
+//         if (!chat) {
+//             throw new ConvexError('Chat is not found');
+//         }
 
-        const memberships = await ctx.db
-            .query('chatMembers')
-            .withIndex('by_chatId', (q) => q.eq('chatId', args.chatId))
-            .collect();
+//         const memberships = await ctx.db
+//             .query('chatMembers')
+//             .withIndex('by_chatId', (q) => q.eq('chatId', args.chatId))
+//             .collect();
 
-        if (!memberships || memberships.length <= 1) {
-            throw new ConvexError('This chat does not have any members');
-        }
+//         if (!memberships || memberships.length <= 1) {
+//             throw new ConvexError('This chat does not have any members');
+//         }
 
-        const messages = await ctx.db
-            .query('messages')
-            .withIndex('by_chatId', (q) => q.eq('chatId', args.chatId))
-            .collect();
+//         const messages = await ctx.db
+//             .query('messages')
+//             .withIndex('by_chatId', (q) => q.eq('chatId', args.chatId))
+//             .collect();
 
-        // Delete chat
-        await ctx.db.delete(args.chatId);
+//         // Delete chat
+//         await ctx.db.delete(args.chatId);
 
-        // Delete chat memberships
-        await Promise.all(
-            memberships.map(async (membership) => {
-                await ctx.db.delete(membership._id);
-            })
-        );
+//         // Delete chat memberships
+//         await Promise.all(
+//             memberships.map(async (membership) => {
+//                 await ctx.db.delete(membership._id);
+//             })
+//         );
 
-        // Delete chat messages
-        await Promise.all(
-            messages.map(async (message) => {
-                await ctx.db.delete(message._id);
-            })
-        );
-    },
-});
+//         // Delete chat messages
+//         await Promise.all(
+//             messages.map(async (message) => {
+//                 await ctx.db.delete(message._id);
+//             })
+//         );
+//     },
+// });
 
 export const leaveChat = mutation({
     args: {

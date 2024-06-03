@@ -13,6 +13,6 @@ export const viemWallet = createWalletClient({
 
 declare global {
     interface Window {
-        ethereum: any;
+        blast: any;
     }
 }

@@ -1,8 +1,8 @@
 'use client';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { User2, Wallet } from 'lucide-react';
+import { User2 } from 'lucide-react';
 import React, { Suspense, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -21,6 +21,8 @@ import { api } from '@/convex/_generated/api';
 import ConnectWalletButton from './connect-wallet-button';
 import Web3ModalProvider from '@/providers/walletconnect-provider';
 import { Badge } from '@/components/ui/badge';
+import { getUserOwnedTokenIds } from '@/lib/fetchCards';
+import { useAction } from 'convex/react';
 
 export type User = {
     username: string;
@@ -36,6 +38,7 @@ export default function AccountSetupForm() {
     const { user } = useUser();
     const router = useRouter();
     const { mutate: updateUser } = useMutationState(api.user.updateUser);
+    const verifyCard = useAction(api.cards.verifyCard);
 
     const [userAccountData, setUserAccountData] = useState<UserSetupProps>({
         username: user?.username || '',
@@ -87,6 +90,8 @@ export default function AccountSetupForm() {
             case 'verified':
                 console.log('Successfully verified the wallet');
                 toast.success('Successfully verified the wallet');
+                const cards = await getUserOwnedTokenIds(walletResource.web3Wallet);
+                // await verifyCards({ args: { cards: cards, walletAddress: walletResource.web3Wallet } });
                 break;
             case 'transferable':
                 console.log('The wallet is transferable?');
@@ -141,6 +146,14 @@ export default function AccountSetupForm() {
 
     async function handleAccountSetup() {
         await accountSetup();
+    }
+
+    async function handleVerifyCards() {
+        const tokenIds = await getUserOwnedTokenIds(userAccountData.web3Wallet);
+        if (!tokenIds) return;
+        for (const tokenId of tokenIds) {
+            await verifyCard({ tokenId: tokenId, walletAddress: userAccountData.web3Wallet });
+        }
     }
 
     function handleSecurity(data: z.infer<typeof FormSchema>) {
@@ -210,6 +223,7 @@ export default function AccountSetupForm() {
                             Save changes
                             <span className="sr-only">Save changes</span>
                         </Button>
+                        <Button onClick={handleVerifyCards}>Verify cards</Button>
                     </div>
                 </form>
             </Form>

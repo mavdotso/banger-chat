@@ -1,4 +1,5 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
+import { createPublicClient, http } from 'viem';
 import { cookieStorage, createStorage } from 'wagmi';
 import { blast } from 'wagmi/chains';
 
@@ -20,4 +21,9 @@ export const wagmiConfig = defaultWagmiConfig({
     storage: createStorage({
         storage: cookieStorage,
     }),
+});
+
+export const wagmiPublicClient = createPublicClient({
+    chain: blast,
+    transport: http(),
 });

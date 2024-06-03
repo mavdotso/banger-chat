@@ -13,3 +13,10 @@ export const getUserByUsername = async ({ ctx, username }: { ctx: QueryCtx | Mut
         .withIndex('by_username', (q) => q.eq('username', username))
         .first();
 };
+
+export const getCardByTokenId = async ({ ctx, tokenId }: { ctx: QueryCtx | MutationCtx; tokenId: string }) => {
+    return await ctx.db
+        .query('cards')
+        .withIndex('by_tokenId', (q) => q.eq('token_id', tokenId))
+        .first();
+};

@@ -10,6 +10,10 @@ const nextConfig = {
     images: {
         domains: ['img.clerk.com', 'utfs.io'],
     },
+    webpack: (config) => {
+        config.externals.push('pino-pretty', 'encoding');
+        return config;
+    },
     async redirects() {
         return [
             {
