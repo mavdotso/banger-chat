@@ -1,10 +1,8 @@
-const authConfig = {
+export default {
     providers: [
         {
-            domain: 'privy.io',
-            applicationID: 'clvxzus1102hr132wssmha2tr',
+            domain: process.env.CLERK_URL,
+            applicationID: 'convex',
         },
     ],
 };
-
-export default authConfig;
