@@ -1,87 +1,54 @@
 import { ConvexError, v } from 'convex/values';
-import { mutation, query } from './_generated/server';
+import { query } from './_generated/server';
+import { getUserByClerkId } from './_utils';
 
-export const sendTextMessage = mutation({
-    args: {
-        sender: v.string(),
-        content: v.string(),
-        channelId: v.id('channels'),
-    },
+export const get = query({
+    args: { id: v.id('chats') },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
 
         if (!identity) {
-            throw new Error('Unauthenticated call to mutation');
+            throw new Error('Unauthorized');
         }
 
-        const user = await ctx.db
-            .query('users')
-            .withIndex('by_tokenIdentifier', (q) => q.eq('tokenIdentifier', identity.tokenIdentifier))
-            .unique();
+        const currentUser = await getUserByClerkId({
+            ctx,
+            clerkId: identity.subject,
+        });
 
-        if (!user) {
+        if (!currentUser) {
             throw new ConvexError('User not found');
         }
 
-        const channel = await ctx.db
-            .query('channels')
-            .filter((q) => q.eq(q.field('_id'), args.channelId))
-            .first();
+        const membership = await ctx.db.query('chatMembers').withIndex('by_memberId_chatId', (q) => q.eq('memberId', currentUser._id).eq('chatId', args.id));
 
-        if (!channel) {
-            throw new ConvexError('Channel not found');
-        }
-
-        if (!channel.users.includes(user._id)) {
-            throw new ConvexError('User is not in the channel');
-        }
-
-        await ctx.db.insert('messages', {
-            sender: user._id,
-            content: args.content,
-            channelId: args.channelId,
-            timestamp: new Date().getTime(),
-        });
-    },
-});
-
-export const getMessages = query({
-    args: {
-        channelId: v.id('channels'),
-    },
-    handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) {
-            throw new Error('Unauthorised');
+        if (!membership) {
+            throw new ConvexError("You aren't a member of this chat");
         }
 
         const messages = await ctx.db
             .query('messages')
-            .withIndex('by_channelId', (q) => q.eq('channelId', args.channelId))
+            .withIndex('by_chatId', (q) => q.eq('chatId', args.id))
+            .order('desc')
             .collect();
 
-        const userProfileCache = new Map();
-
-        const messagesWithSender = await Promise.all(
+        const messagesWithUsers = Promise.all(
             messages.map(async (message) => {
-                let sender;
-                // Check if sender profile is in cache
-                if (userProfileCache.has(message.sender)) {
-                    sender = userProfileCache.get(message.sender);
-                } else {
-                    // Fetch sender profile from the database
-                    sender = await ctx.db
-                        .query('users')
-                        .filter((q) => q.eq(q.field('_id'), message.sender))
-                        .first();
-                    // Cache the sender profile
-                    userProfileCache.set(message.sender, sender);
+                const messageSender = await ctx.db.get(message.senderId);
+
+                if (!messageSender) {
+                    throw new ConvexError('Could not find sender of message');
                 }
 
-                return { ...message, sender };
+                return {
+                    message,
+                    senderImage: messageSender.imageUrl,
+                    senderName: messageSender.username,
+                    isCurrentUser: messageSender?._id === currentUser._id,
+                };
             })
         );
 
-        return messagesWithSender;
+        return messagesWithUsers;
     },
 });

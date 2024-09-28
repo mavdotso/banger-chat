@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+@layer base {
+    :root {
+        --background: 148 100% 95%;
+        --foreground: 148 5% 0%;
+        --card: 148 50% 90%;
+        --card-foreground: 148 5% 10%;
+        --popover: 148 100% 95%;
+        --popover-foreground: 148 100% 0%;
+        --primary: 148 68.7% 61.2%;
+        --primary-foreground: 0 0% 0%;
+        --secondary: 148 30% 70%;
+        --secondary-foreground: 0 0% 0%;
+        --muted: 110 30% 85%;
+        --muted-foreground: 148 5% 35%;
+        --accent: 110 30% 80%;
+        --accent-foreground: 148 5% 10%;
+        --destructive: 0 100% 30%;
+        --destructive-foreground: 148 5% 90%;
+        --border: 148 30% 50%;
+        --input: 148 30% 18%;
+        --ring: 148 68.7% 61.2%;
+        --radius: 1rem;
+    }
+    .dark {
+        --background: 148 50% 5%;
+        --foreground: 148 5% 90%;
+        --card: 148 50% 0%;
+        --card-foreground: 148 5% 90%;
+        --popover: 148 50% 5%;
+        --popover-foreground: 148 5% 90%;
+        --primary: 148 68.7% 61.2%;
+        --primary-foreground: 0 0% 0%;
+        --secondary: 148 30% 10%;
+        --secondary-foreground: 0 0% 100%;
+        --muted: 110 30% 15%;
+        --muted-foreground: 148 5% 60%;
+        --accent: 110 30% 15%;
+        --accent-foreground: 148 5% 90%;
+        --destructive: 0 100% 30%;
+        --destructive-foreground: 148 5% 90%;
+        --border: 148 30% 18%;
+        --input: 148 30% 18%;
+        --ring: 148 68.7% 61.2%;
+        --radius: 1rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer utilities {
+    /* Chrome, Opera, Safari */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* Edge, Firefox, IE */
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+@import '~@uploadthing/react/styles.css';
